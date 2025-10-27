@@ -1,0 +1,1038 @@
+/* ==== ESTILOS GENERALES ==== */
+:root {
+  --verde: #79dc40;
+  --dorado: #c9a227;
+  --gris: #f5f5f5;
+  --gris-destacado: #a0a0a0;
+  --oscuro: #1f1f1f;
+  --blanco: #ffffff;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+body {
+  background: linear-gradient(135deg, var(--gris) 0%, #eaeaea 100%);
+  color: var(--oscuro);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ==== HEADER ==== */
+header {
+  background: linear-gradient(45deg, #808080, #FFD700, #28a745);
+  color: var(--negro);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 2rem;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+}
+
+header .logo-header {
+  height: 55px;
+  border-radius: 50%;
+}
+
+header h1 {
+  flex-grow: 1;
+  text-align: center;
+  font-size: 1.8rem;
+  letter-spacing: 1px;
+}
+
+nav a {
+  color: var(--negro);
+  text-decoration: none;
+  margin: 0 8px;
+  font-weight: 500;
+  transition: 0.3s;
+}
+
+nav a:hover {
+  color: var(--blanco);
+}
+
+nav a.activo {
+  color: var(--negro);
+  font-weight: 600;
+}
+
+.btn-login {
+  background: var(--dorado);
+  color: var(--oscuro);
+  padding: 6px 12px;
+  border-radius: 8px;
+}
+
+/* ==== CONTENEDORES ==== */
+.contenedor {
+  width: 90%;
+  max-width: 1200px;
+  margin: 2rem auto;
+  flex-grow: 1;
+}
+
+.card {
+  background: var(--blanco);
+  padding: 1rem 1.5rem;
+  border-radius: 15px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 1.5rem;
+}
+
+h2 {
+  border-left: 5px solid var(--dorado);
+  padding-left: 10px;
+  margin-bottom: 10px;
+  color: var(--verde);
+}
+
+/* ==== TABLAS ==== */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+thead {
+  background: var(--verde);
+  color: var(--blanco);
+}
+
+th, td {
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+}
+
+tbody tr:hover {
+  background-color: #f0f0f0;
+}
+
+/* ==== GRID GENERAL ==== */
+.grid-2 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 20px;
+}
+
+.grid-equipos, .grid-jugadores, .grid-noticias {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+/* ==== TARJETAS ==== */
+.tarjeta {
+  background: var(--blanco);
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  padding: 15px;
+  text-align: center;
+  transition: transform 0.3s;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.tarjeta:hover {
+  transform: translateY(-5px);
+}
+
+.tarjeta img {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  margin-bottom: 8px;
+}
+
+/* ==== FORMULARIOS ==== */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+input, select, textarea {
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #bbb;
+  outline: none;
+  font-size: 1rem;
+}
+
+input:focus {
+  border-color: var(--verde);
+}
+
+button {
+  background: var(--verde);
+  color: var(--blanco);
+  border: none;
+  padding: 10px 15px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.3s;
+}
+
+button:hover {
+  background: var(--dorado);
+  color: var(--oscuro);
+}
+
+/* ==== FOOTER ==== */
+footer {
+  background: var(--oscuro);
+  color: var(--blanco);
+  text-align: center;
+  padding: 15px 0;
+  font-size: 0.9rem;
+  letter-spacing: 0.5px;
+  margin-top: auto;
+}
+
+/* ==== LOGIN ==== */
+#loginForm {
+  max-width: 400px;
+  margin: 3rem auto;
+  background: var(--blanco);
+  padding: 2rem;
+  border-radius: 15px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+}
+
+.hidden { 
+  display: none; 
+}
+
+.mensaje-bienvenida {
+  text-align: center;
+  color: var(--verde);
+  font-weight: bold;
+  margin-top: 15px;
+}
+
+/* ==== REGISTRO ADMIN ==== */
+.card-registro {
+  background: var(--blanco);
+  border-radius: 15px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+  max-width: 800px;
+  margin: 20px auto;
+}
+
+#formEquipo.hidden {
+  display: none;
+}
+
+#tablaEquipos {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+#tablaEquipos th {
+  background-color: var(--verde);
+  color: var(--blanco);
+}
+
+#tablaEquipos td, #tablaEquipos th {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: center;
+}
+
+.btn-editar, .btn-eliminar {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 1.1rem;
+}
+
+.btn-editar:hover {
+  color: var(--verde);
+}
+
+.btn-eliminar:hover {
+  color: red;
+}
+
+/* ==== GRID DE EQUIPOS ==== */
+.grid-equipos {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+  justify-items: center;
+  margin-top: 20px;
+}
+
+.card-equipo {
+  background: var(--blanco);
+  padding: 1rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.card-equipo img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 15px;
+}
+
+.card-equipo h3 {
+  font-size: 1.5rem;
+  color: var(--verde);
+  margin: 0.5rem 0;
+}
+
+.card-equipo p {
+  font-size: 1rem;
+  color: var(--gris-destacado);
+}
+
+/* Ajustes para mejorar la apariencia en dispositivos pequeños */
+@media (max-width: 768px) {
+  .grid-equipos {
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  }
+
+  .card-equipo img {
+    height: 150px;
+  }
+
+  .card-equipo h3 {
+    font-size: 1.3rem;
+  }
+}
+
+
+/* ==== TABLA DE EQUIPOS ==== */
+#tablaEquipos {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+#tablaEquipos th {
+  background-color: var(--verde);
+  color: var(--blanco);
+  padding: 12px;
+  text-align: center;
+}
+
+#tablaEquipos td {
+  padding: 10px;
+  text-align: center;
+  border: 1px solid #ddd;
+}
+
+#tablaEquipos td img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+#tablaEquipos tbody tr:hover {
+  background-color: #f0f0f0;
+}
+
+#tablaEquipos td .btn-editar, #tablaEquipos td .btn-eliminar {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 1.1rem;
+  padding: 5px;
+  transition: color 0.3s ease;
+}
+
+#tablaEquipos td .btn-editar:hover {
+  color: var(--verde);
+}
+
+#tablaEquipos td .btn-eliminar:hover {
+  color: red;
+}
+
+/* ==== TABLA DE EQUIPOS ==== */
+#tablaEquipos {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+#tablaEquipos th {
+  background-color: var(--verde);
+  color: var(--blanco);
+  padding: 12px;
+  text-align: center;
+}
+
+#tablaEquipos td {
+  padding: 10px;
+  text-align: center;
+  border: 1px solid #ddd;
+}
+
+#tablaEquipos td img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+#tablaEquipos tbody tr:hover {
+  background-color: #f0f0f0;
+}
+
+#tablaEquipos td .btn-editar, #tablaEquipos td .btn-eliminar {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 1.1rem;
+  padding: 5px;
+  transition: color 0.3s ease;
+}
+
+#tablaEquipos td .btn-editar:hover {
+  color: var(--verde);
+}
+
+#tablaEquipos td .btn-eliminar:hover {
+  color: red;
+}
+
+/* ==== ESTILOS GENERALES ==== */
+:root {
+  --verde: #007a33;
+  --dorado: #c9a227;
+  --gris: #f5f5f5;
+  --oscuro: #1f1f1f;
+  --blanco: #ffffff;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+body {
+  background: url('img/3.jpg') no-repeat center center fixed;
+  background-size: cover;
+  color: var(--oscuro);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+
+
+/* ==== FORMULARIOS ==== */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+input, select, textarea {
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #bbb;
+  outline: none;
+  font-size: 1rem;
+}
+
+input:focus {
+  border-color: var(--verde);
+}
+
+button {
+  background: var(--verde);
+  color: var(--blanco);
+  border: none;
+  padding: 10px 15px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.3s;
+}
+
+button:hover {
+  background: var(--dorado);
+  color: var(--oscuro);
+}
+
+/* ==== FORMULARIO REGISTRO ==== */
+#formEquipo.hidden {
+  display: none;
+}
+
+.btn-agregar {
+  background: var(--dorado);
+  color: var(--blanco);
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 20px 0;
+}
+
+#btnAgregar i {
+  font-size: 1.2rem;
+}
+
+/* ==== TABLAS ==== */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+thead {
+  background: var(--verde);
+  color: var(--blanco);
+}
+
+th, td {
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+}
+
+tbody tr:hover {
+  background-color: #f0f0f0;
+}
+
+/* ==== FOOTER ==== */
+footer {
+  background: var(--oscuro);
+  color: var(--blanco);
+  text-align: center;
+  padding: 15px 0;
+  font-size: 0.9rem;
+  letter-spacing: 0.5px;
+  margin-top: auto;
+}
+
+/* Botón para mostrar / ocultar formulario */
+.toggle-btn {
+  display: inline-block;
+  background: #00bfff;
+  color: #111;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-bottom: 20px;
+  transition: all 0.3s ease;
+}
+
+header.header-panel {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(90deg, #111, #222);
+  padding: 10px 30px;
+  border-bottom: 3px solid gold;
+}
+
+.logos-header {
+  display: flex;
+  gap: 15px;
+}
+
+.logo-header, .logo-header-sec {
+  height: 60px;
+  width: auto;
+  border-radius: 10px;
+}
+
+.btn-salir {
+  background: crimson;
+  border: none;
+  color: white;
+  padding: 8px 14px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.contenedor-principal {
+  display: flex;
+  height: calc(100vh - 100px);
+}
+
+.menu-lateral {
+  background: #111;
+  width: 220px;
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  border-right: 3px solid gold;
+}
+
+.menu-btn {
+  background: none;
+  color: gold;
+  border: 1px solid gold;
+  margin: 6px 0;
+  padding: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.3s;
+}
+.menu-btn:hover, .menu-btn.activo {
+  background: gold;
+  color: #111;
+}
+
+.contenido {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+h2 {
+  border-left: 5px solid gold;
+  padding-left: 10px;
+}
+
+.formulario {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: #222;
+  padding: 15px;
+  border-radius: 10px;
+  border: 1px solid #333;
+}
+
+.formulario input, .formulario textarea, .formulario select {
+  padding: 8px;
+  border: none;
+  border-radius: 5px;
+  background: #333;
+  color: #fff;
+}
+
+.btn-dorado {
+  background: gold;
+  color: #111;
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  font-weight: bold;
+  cursor: pointer;
+}
+.btn-cancelar {
+  background: #555;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.btn-toggle {
+  margin: 10px 0;
+  background: #333;
+  color: gold;
+  border: 1px solid gold;
+  border-radius: 8px;
+  padding: 8px;
+  cursor: pointer;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+  background: #e6e6cd;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+th, td {
+  padding: 10px;
+  text-align: left;
+  border-bottom: 1px solid #333;
+}
+
+th {
+  background: gold;
+  color: #111;
+}
+
+td img.logo-tabla {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+tr:hover {
+  background: #333;
+}
+
+.hidden { display: none; }
+
+
+.tablas-dobles {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.tabla-columna {
+  flex: 1;
+  min-width: 250px;
+}
+
+.tabla-columna h3 {
+  text-align: center;
+  margin-bottom: 0.5rem;
+}
+.contenedor-noticias {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* dos columnas */
+  gap: 15px;
+}
+
+.noticia-card {
+  background: white;
+  padding: 10px;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+ #jornada {
+    padding: 1rem;
+    background: #f9f9f9;
+    border-radius: 12px;
+    margin: 20px 0;
+  }
+  .dia {
+    margin-top: 1rem;
+  }
+  .dia h3 {
+    background: #0055aa;
+    color: white;
+    padding: .5rem 1rem;
+    border-radius: 8px;
+  }
+  .partido-jornada {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: .6rem 1rem;
+    margin-top: .5rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  }
+  .partido-jornada span {
+    font-weight: bold;
+  }
+  .estadisticas {
+    font-size: .9rem;
+    color: #333;
+    margin-left: 1.5rem;
+  }
+  .estado {
+    color: red;
+    font-size: .9rem;
+    margin-left: .5rem;
+  }
+  main {
+  padding: 1.5rem;
+}
+
+h2, h3 {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.contenedor-partidos {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1rem;
+}
+
+.partido-card {
+  background: white;
+  border-radius: 12px;
+  padding: 1rem;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  text-align: center;
+  position: relative;
+}
+
+.partido-card h4 {
+  margin-bottom: .6rem;
+}
+
+.partido-card .marcador {
+  font-size: 1.4rem;
+  font-weight: bold;
+  color: #222;
+}
+
+.partido-card .estado {
+  position: absolute;
+  top: .5rem;
+  right: .8rem;
+  font-size: .8rem;
+  font-weight: bold;
+}
+
+.estado.en_vivo { color: red; }
+.estado.por_jugar { color: #555; }
+.estado.jugado { color: #0066cc; }
+
+.estadisticas {
+  margin-top: .8rem;
+  font-size: .9rem;
+  text-align: left;
+  background: #f7f7f7;
+  border-radius: 8px;
+  padding: .5rem .8rem;
+}
+
+.btn-iniciar, .btn-finalizar {
+  background: #FFD700;
+  border: none;
+  padding: .5rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-top: .5rem;
+}
+
+.btn-iniciar:hover, .btn-finalizar:hover {
+  background: #e6c300;
+}
+.dia-bloque {
+  margin-bottom: 20px;
+}
+
+.dia-header {
+  font-weight: bold;
+  font-size: 1rem;
+  margin-bottom: 8px;
+  color: #333;
+}
+
+.lista-partidos {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.partido-item {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  justify-items: center;
+  gap: 10px;
+  padding: 6px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.hora-cat {
+  grid-column: 1 / 4;
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  color: #666;
+  margin-bottom: 4px;
+}
+
+.equipo {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.equipo-local {
+  justify-self: start;
+}
+
+.equipo-visitante {
+  justify-self: end;
+  flex-direction: row-reverse;
+}
+
+.equipo img {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+}
+
+.marcador {
+  font-weight: bold;
+  background: #f3f3f3;
+  border-radius: 8px;
+  padding: 4px 12px;
+  min-width: 70px;
+  text-align: center;
+  box-shadow: 0 0 3px rgba(0, 0, 0, 0.1);
+}
+
+.partido-item.en-vivo .marcador {
+  background: #ffdede;
+  color: #d00;
+}
+/* === ESTILOS SOLO PARA PARTIDOS PÚBLICO === */
+/* === PARTIDOS PUBLICO === */
+.dia-bloque {
+  margin-bottom: 20px;
+}
+
+.dia-header {
+  font-weight: bold;
+  font-size: 1rem;
+  margin-bottom: 8px;
+  color: #333;
+}
+
+.lista-partidos {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.partido-item {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  justify-items: center;
+  background: #fff;
+  border-radius: 12px;
+  padding: .8rem 1rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.partido-item:hover {
+  transform: scale(1.02);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.12);
+}
+
+/* Hora, categoría y estado */
+.hora-categoria {
+  grid-column: 1 / 4;
+  display: flex;
+  justify-content: space-between;
+  font-size: .85rem;
+  color: #666;
+  margin-bottom: .4rem;
+}
+
+/* Detalle del partido: logos, nombres y marcador */
+.partido-detalle {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  justify-items: center;
+  gap: 1rem;
+  width: 100%;
+}
+
+.equipo {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  font-weight: 600;
+}
+
+.equipo img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.equipo-local { justify-self: start; }
+.equipo-visitante { justify-self: end; flex-direction: row-reverse; }
+
+.marcador {
+  font-weight: bold;
+  font-size: 1.4rem;
+  background: #f4f4f4;
+  padding: .4rem .8rem;
+  border-radius: 10px;
+  min-width: 70px;
+  text-align: center;
+}
+
+/* Estados de partido */
+.partido-item.en_vivo { border-left: 5px solid #e53935; background: #fff5f5; }
+.partido-item.finalizado { border-left: 5px solid #388e3c; background: #f3fff5; }
+.partido-item.pendiente { border-left: 5px solid #fbc02d; background: #fffdf2; }
+.hora-categoria {
+  display: flex;
+  justify-content: space-between;
+  font-size: .9rem;
+  color: #666;
+  margin-bottom: 4px;
+}
+
+.estado-partido {
+  display: block;
+  text-align: center;
+  font-weight: 600;
+  font-size: .85rem;
+  padding: 2px 8px;
+  border-radius: 8px;
+  margin-bottom: .5rem;
+  color: #fff;
+}
+
+.estado-partido.en_vivo { background-color: #e53935; }
+.estado-partido.finalizado { background-color: #388e3c; }
+.estado-partido.pendiente { background-color: #fbc02d; color: #333; }
+
+/* Estado del partido */
+.estado-partido {
+  display: inline-block;
+  font-size: 0.75rem;         /* tamaño compacto */
+  font-weight: 600;           /* un poco más destacado */
+  padding: 2px 6px;           /* espacio interno pequeño */
+  border-radius: 6px;         /* esquinas redondeadas */
+  text-transform: uppercase;  /* todo en mayúsculas */
+  color: #fff;                /* texto blanco */
+  background-color: #888;     /* gris por defecto */
+}
+
+/* Colores según estado */
+.partido-item.en-vivo .estado-partido {
+  background-color: #e53935;  /* rojo para en vivo */
+}
+
+.partido-item.finalizado .estado-partido {
+  background-color: #388e3c;  /* verde para finalizado */
+}
+
+.partido-item.pendiente .estado-partido {
+  background-color: #fbc02d;  /* amarillo para pendiente */
+  color: #333;                /* texto oscuro sobre amarillo */
+}

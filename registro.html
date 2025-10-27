@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Panel Administrativo - Olimpiadas Juan Solano</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="panel-admin fondo-gradiente">
+
+  <header class="header-panel">
+    <div class="logos-header">
+      <img src="img/logo.png" alt="Logo campeonato" class="logo-header" />
+      <img src="img/logo_institucion.png" alt="Logo institucional" class="logo-header-sec" />
+    </div>
+    <h1>Panel Administrativo - Olimpiadas Juan Solano</h1>
+    <button id="logoutBtn" class="btn-salir">Cerrar Sesión</button>
+  </header>
+
+  <div class="contenedor-principal">
+    <!-- Menú lateral -->
+    <nav class="menu-lateral">
+      <button class="menu-btn" data-section="equipos">🏆 Equipos</button>
+      <button class="menu-btn" data-section="jugadores">👟 Jugadores</button>
+      <button class="menu-btn" data-section="partidos">⚽ Partidos</button>
+      <button class="menu-btn" data-section="noticias">📰 Noticias</button>
+      <button class="menu-btn" data-section="estadisticas">📊 Estadísticas</button>
+    </nav>
+
+    
+    <!-- Contenido dinámico -->
+    <main class="contenido" id="contenido">
+      <!-- Sección de Equipos -->
+      <section id="equipos" class="seccion-activa">
+         <button id="toggleFormulario" class="btn-toggle">+ Agregar Equipo</button>
+        <h2>Gestión de Equipos</h2>
+        <form id="formEquipo" class="formulario hidden">
+          <input type="hidden" id="equipoId" />
+          <label>Nombre:</label>
+          <input type="text" id="nombre" required />
+          <label>Logo URL:</label>
+         <input type="file" id="logo" accept="image/*">
+        <img id="previewLogo" src="img/logo.png" alt="Vista previa" style="max-width:100px;">
+          <label>Año Fundado:</label>
+          <input type="date" id="fundado" required />
+          <label>Historia:</label>
+          <textarea id="historia"></textarea>
+          <div class="botones">
+            <button type="submit" class="btn-dorado">Guardar</button>
+            <button type="button" id="cancelar" class="btn-cancelar">Cancelar</button>
+          </div>
+        </form>
+       
+        <table id="tablaEquipos">
+          <thead>
+            <tr><th>Logo</th><th>Nombre</th><th>Fundado</th><th>Historia</th><th>Acciones</th></tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </section>
+
+
+
+   <!-- ============================= -->
+<!-- 📋 SECCIÓN DE JUGADORES -->
+<!-- ============================= -->
+<section id="jugadores" class="hidden">
+  <div class="encabezado-seccion">
+    <button id="toggleFormularioJugador" class="btn-toggle">+ Agregar Jugador</button>
+    <h2>Gestión de Jugadores</h2>
+  </div>
+
+  <!-- 📌 Formulario de jugador -->
+  <form id="formJugador" class="formulario hidden">
+    <input type="hidden" id="jugadorId" name="jugadorId" />
+
+    <div class="campo-form">
+      <label for="nombreJugador">Nombre:</label>
+      <input type="text" id="nombreJugador" name="nombre" required />
+    </div>
+
+    <div class="campo-form">
+      <label for="posicion">Posición:</label>
+      <input type="text" id="posicion" name="posicion" placeholder="Ej: Defensa, Delantero" required />
+    </div>
+
+    <div class="campo-form">
+      <label for="dorsal">Dorsal:</label>
+      <input type="number" id="dorsal" name="dorsal" min="0" />
+    </div>
+
+    <div class="campo-form">
+      <label for="fecha_nacimiento">Fecha de Nacimiento:</label>
+      <input type="date" id="fecha_nacimiento" name="fecha_nacimiento" required />
+    </div>
+
+    <div class="campo-form">
+      <label for="origen_vinculo">Origen del Vínculo:</label>
+      <select id="origen_vinculo" name="origen_vinculo" required>
+        <option value="">Seleccione...</option>
+        <option value="Residencia">Residencia</option>
+        <option value="Nacimiento">Nacimiento</option>
+        <option value="Matrimonio">Matrimonio</option>
+        <option value="V_Familiar">Vínculo Familiar</option>
+      </select>
+    </div>
+
+    <div class="campo-form">
+      <label for="equipo_id">Equipo:</label>
+      <select id="equipo_id" name="equipo_id" required>
+        <option value="">Cargando equipos...</option>
+      </select>
+    </div>
+
+    <div class="campo-form">
+      <label for="categoriaJugador">Categoría:</label>
+      <select id="categoriaJugador" name="categoria" required>
+        <option value="masculino">Masculino</option>
+        <option value="femenino">Femenino</option>
+      </select>
+    </div>
+
+    <div class="botones">
+      <button type="submit" class="btn-dorado">💾 Guardar</button>
+      <button type="button" id="cancelarJugador" class="btn-cancelar">Cancelar</button>
+    </div>
+  </form>
+
+  <!-- 📋 Tabla de jugadores -->
+  <div class="tabla-contenedor">
+    <table id="tablaJugadores">
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>Posición</th>
+          <th>Dorsal</th>
+          <th>Fecha Nac.</th>
+          <th>Origen</th>
+          <th>Equipo</th>
+          <th>Categoría</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Filas generadas dinámicamente -->
+      </tbody>
+    </table>
+  </div>
+</section>
+
+
+<section id="partidos" class="hidden">
+  <button id="toggleFormularioPartido" class="btn-toggle">+ Agregar Partidos</button>
+  <h2>Gestión de Partidos</h2>
+
+   <label for="categoria">Categoría:</label>
+    <select id="categoria" name="categoria" required>
+      <option value="masculino">Masculino</option>
+      <option value="femenino">Femenino</option>
+    </select>
+
+  <form id="formPartido" class="formulario hidden">
+    <input type="hidden" id="partidoId" name="partidoId" />
+
+    <label for="equipo_local_id">Equipo Local:</label>
+    <select id="equipo_local_id" name="equipo_local_id" required></select>
+
+    <label for="equipo_visitante_id">Equipo Visitante:</label>
+    <select id="equipo_visitante_id" name="equipo_visitante_id" required></select>
+
+    <label for="fecha">Fecha y Hora:</label>
+    <input type="datetime-local" id="fecha" name="fecha" required />
+
+    <label for="estado">Estado:</label>
+    <select id="estado" name="estado" required>
+      <option value="pendiente">Pendiente</option>
+      <option value="en_vivo">En Vivo</option>
+      <option value="finalizado">Finalizado</option>
+    </select>
+
+    <label for="marcador_local">Marcador Local:</label>
+    <input type="number" id="marcador_local" name="marcador_local" value="0" min="0" />
+
+    <label for="marcador_visitante">Marcador Visitante:</label>
+    <input type="number" id="marcador_visitante" name="marcador_visitante" value="0" min="0" />
+
+   
+
+    <!-- Selección de delegados -->
+    <label for="delegado_mesa_1_id">Delegado Mesa 1:</label>
+    <select id="delegado_mesa_1_id" name="delegado_mesa_1_id" required></select>
+
+    <label for="delegado_mesa_2_id">Delegado Mesa 2:</label>
+    <select id="delegado_mesa_2_id" name="delegado_mesa_2_id" required></select>
+
+    <!-- Selección de árbitros -->
+    <label for="arbitro_principal_id">Árbitro Principal:</label>
+    <select id="arbitro_principal_id" name="arbitro_principal_id" required></select>
+
+    <label for="arbitro_asistente_1_id">Árbitro Asistente 1:</label>
+    <select id="arbitro_asistente_1_id" name="arbitro_asistente_1_id" required></select>
+
+    <label for="arbitro_asistente_2_id">Árbitro Asistente 2:</label>
+    <select id="arbitro_asistente_2_id" name="arbitro_asistente_2_id" required></select>
+
+    <div class="botones">
+      <button type="submit" class="btn-dorado">Guardar</button>
+      <button type="button" id="cancelarPartido" class="btn-cancelar">Cancelar</button>
+    </div>
+  </form>
+
+  <table id="tablaPartidos">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Encuentro</th>
+        <th>Fecha</th>
+        <th>Marcador</th>
+        <th>Estado</th>
+        <th>Categoría</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+</section>
+
+
+<section id="noticias">
+  <h2>Noticias</h2>
+  <button id="toggleNoticia" class="btn-toggle">+ Agregar Noticia</button>
+
+  <form id="formNoticia" class="hidden">
+    <input type="hidden" id="noticiaId">
+    <input type="text" id="tituloNoticia" placeholder="Título" required>
+    <textarea id="descripcionNoticia" placeholder="Contenido" required></textarea>
+    <input type="date" id="fechaNoticia">
+    <input type="file" id="imagenNoticia" accept="image/*"> <!-- subida -->
+    <img id="previewImagen" src="" alt="Vista previa" style="max-width: 150px; display: none; margin-top: 5px;">
+    <input type="text" id="videoNoticia" placeholder="URL Video (opcional)">
+    <div class="acciones-form">
+      <button type="submit">Guardar</button>
+      <button type="button" id="cancelarNoticia">Cancelar</button>
+    </div>
+  </form>
+
+  <table id="tablaNoticias">
+    <thead>
+      <tr>
+        <th>Título</th>
+        <th>Contenido</th>
+        <th>Media</th>
+        <th>Fecha</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+</section>
+
+
+<!-- Estilos básicos -->
+<style>
+  .hidden { display: none; }
+  .acciones-form { margin-top: 10px; }
+  #tablaNoticias { width: 100%; border-collapse: collapse; margin-top: 15px; }
+  #tablaNoticias th, #tablaNoticias td { border: 1px solid #ccc; padding: 5px; text-align: left; }
+  #tablaNoticias img, #tablaNoticias video { max-width: 100px; }
+</style>
+
+     
+
+      </section>
+
+     <section id="estadisticas" class="seccion">
+      <div class="card-registro">
+        <button id="toggleEstadistica" class="btn-toggle">+ Agregar Estadística</button>
+        <form id="formEstadistica" class="formulario hidden">
+          <input type="hidden" id="estadisticaId">
+          <select id="partidoEstadistica" required></select>
+          <select id="jugadorEstadistica" required></select>
+          <select id="tipo_evento" required>
+            <option value="gol">Gol</option>
+            <option value="amarilla">Tarjeta Amarilla</option>
+            <option value="roja">Tarjeta Roja</option>
+          </select>
+          <input type="number" id="minuto" placeholder="Minuto" required>
+          <div class="acciones-form">
+            <button type="submit" class="btn-guardar">Guardar</button>
+            <button type="button" id="cancelarEstadistica" class="btn-cancelar">Cancelar</button>
+          </div>
+        </form>
+      </div>
+      <table id="tablaEstadisticas" class="tabla-admin">
+        <thead>
+          <tr>
+            <th>Partido</th><th>Jugador</th><th>Evento</th><th>Minuto</th><th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </section>
+    </main>
+  </div>
+
+  <footer>
+    <p>Comuna Quilloac | Desarrollado por <strong>Xavier Pichasaca</strong> © 2025</p>
+  </footer>
+
+  <!-- Scripts -->
+  <script type="module" src="partidosRealTime.js"></script>
+  <script type="module" src="script.js"></script>
+  <script type="module" src="equipos.js"></script>
+  <script type="module" src="jugadores.js"></script>
+  <script type="module" src="partidos.js"></script>
+  <script type="module" src="noticias.js"></script>
+  <script type="module" src="estadisticas.js"></script>
+
+<script type="module">
+    import { validarAcceso } from "validarAcceso.js";
+
+    validarAcceso(window.location.pathname.split("/").pop());
+  </script>
+
+</body>
+</html>

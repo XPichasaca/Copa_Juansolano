@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login - Olimpiadas Juan Solano</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="fondo-gradiente">
+  <header>
+    <img src="img/logo.png" alt="Logo" class="logo-header" />
+    <h1>Panel Administrativo</h1>
+  </header>
+
+  <main class="centrado">
+    <div class="card-login">
+      <h2>Iniciar Sesión</h2>
+      <form id="loginForm">
+        <input type="email" id="email" placeholder="Correo electrónico" required />
+        <input type="password" id="password" placeholder="Contraseña" required />
+        <button type="submit" class="btn-dorado">Ingresar</button>
+      </form>
+      <p class="mensaje-login">¿No tienes cuenta? <a href="registro.html" id="registrarBtn">Registrarme</a></p>
+    </div>
+    <!-- Aquí aparece el mensaje de bienvenida después de login -->
+    <div id="mensajeBienvenida" class="hidden">
+      <p id="bienvenidaTexto"></p>
+    </div>
+  </main>
+
+  <footer>
+    <p>Comuna Quilloac | Desarrollado por <strong>Xavier Pichasaca</strong> © 2025</p>
+  </footer>
+
+  <script type="module" src="login.js"></script>
+</body>
+</html>

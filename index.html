@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Olimpiadas Juan Solano</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+   
+    /* ===== DASHBOARD ===== */
+    .menu-dashboard {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin: 20px 0;
+      flex-wrap: wrap;
+    }
+    .btn-dash {
+      background: #FFD700;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .btn-dash.activo {
+      background: #28a745;
+      color: #fff;
+    }
+
+    /* ===== SECCIONES ===== */
+    .seccion { display: none; margin-bottom: 20px; }
+    .seccion.activo { display: block; }
+
+    /* ===== NOTICIAS ===== */
+    .contenedor-noticias {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+    .noticia-card {
+      background: #fff;
+      padding: 12px;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+    }
+    .noticia-card img {
+      width: 100%;
+      border-radius: 8px;
+      margin-bottom: 10px;
+    }
+    .noticia-card .btn-compartir {
+      margin-top: 10px;
+      padding: 6px;
+      font-size: 0.9rem;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      color: #fff;
+    }
+    .noticia-card .facebook { background: #4267B2; }
+    .noticia-card .twitter { background: #1DA1F2; }
+    .noticia-card .whatsapp { background: #25D366; }
+
+    /* ===== PARTIDO EN VIVO ===== */
+    .partido-vivo {
+      background: #ff4c4c;
+      color: #fff;
+      padding: 15px;
+      border-radius: 10px;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .partido-card { background:#fff; padding:10px; border-radius:8px; margin-bottom:10px; box-shadow:0 1px 4px rgba(0,0,0,0.1);}
+    .estado-partido.en_vivo { color:#ff0000; font-weight:bold; }
+    table { width: 100%; border-collapse: collapse; margin-top:10px; }
+    table th, table td { border:1px solid #ddd; padding:8px; text-align:center; }
+    table th { background:#f2f2f2; }
+  </style>
+</head>
+<body class="fondo-gradiente">
+
+  <!-- HEADER -->
+  <header>
+    <img src="img/logss.png" alt="Logo" class="logo-header" onclick="location.href='index.html'"/>
+    <h1 onclick="location.href='index.html'" style="cursor:pointer;">Olimpiadas Juan Solano</h1>
+    <nav>
+      <a href="index.html" class="activo">Inicio</a>
+      <a href="equipos.html">Equipos</a>
+      <a href="partidos.html">Partidos</a>
+      <a href="tabla.html">Tabla</a>
+      <a href="jugadores.html">Jugadores</a>
+      <a href="noticias.html">Noticias</a>
+      <a href="login.html" class="btn-login">Login</a>
+    </nav>
+    <img src="img/Quilloac.jpg" alt="Escudo" class="logo-header" />
+  </header>
+
+  <!-- CONTENIDO PRINCIPAL -->
+  <main class="contenedor">
+
+    <!-- MENÚ DASHBOARD HORIZONTAL -->
+    <section class="menu-dashboard">
+      <button class="btn-dash activo" data-seccion="noticias">📰 Noticias</button>
+      <button class="btn-dash" data-seccion="posiciones">🏆 Posiciones</button>
+      <button class="btn-dash" data-seccion="goleadores">⚽ Goleadores</button>
+      <button class="btn-dash" data-seccion="tarjetas">🟨 Tarjetas</button>
+      <button class="btn-dash" data-seccion="partidos">📅 Partidos</button>
+    </section>
+
+    <!-- NOTICIAS -->
+    <section id="noticias" class="seccion activo">
+      <section class="card">
+      <h2>📰 Últimas Noticiasssss</h2>
+      <div class="contenedor-noticias" id="listaNoticias"></div>
+    </section>
+
+    </section>
+
+    <!-- POSICIONES -->
+    <section id="posiciones" class="seccion">
+      <div class="card">
+        <h2>🏆 Tablas de Posiciones</h2>
+        <div class="tablas-dobles">
+          <div class="tabla-columna">
+            <h3>🧔 Masculino</h3>
+            <table id="resumenTablaMasculino">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Equipo</th>
+                  <th>Pts</th>
+                  <th>PJ</th>
+                  <th>DG</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>1</td><td>Team A</td><td>12</td><td>5</td><td>8</td></tr>
+                <tr><td>2</td><td>Team B</td><td>10</td><td>5</td><td>5</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="tabla-columna">
+            <h3>👩 Femenino</h3>
+            <table id="resumenTablaFemenino">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Equipo</th>
+                  <th>Pts</th>
+                  <th>PJ</th>
+                  <th>DG</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>1</td><td>Team C</td><td>15</td><td>5</td><td>12</td></tr>
+                <tr><td>2</td><td>Team D</td><td>9</td><td>5</td><td>3</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- GOLEADORES -->
+    <section id="goleadores" class="seccion">
+        <div class="container">
+    <h2>Tabla de Goleadores</h2>
+    <table id="tablaGoleadores">
+      <thead>
+        <tr>
+          <th>Jugador</th>
+          <th>Equipo</th>
+          <th>Goles</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Se llenará dinámicamente con JS -->
+      </tbody>
+    </table>
+    </section>
+
+    <!-- TARJETAS -->
+    <section id="tarjetas" class="seccion">
+        <h2>Tabla de Amonestados</h2>
+    <table id="tablaAmonestados">
+      <thead>
+        <tr>
+          <th>Jugador</th>
+          <th>Equipo</th>
+          <th>Detalles</th>
+          <th>Total</th>
+          <th>Historial</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Se llenará dinámicamente con JS -->
+      </tbody>
+    </table>
+
+    <div id="contenedorHistorial">
+      <!-- Aquí se mostrará el historial de eventos al marcar checkbox -->
+    </div>
+  </div>
+    </section>
+
+    <!-- PARTIDOS -->
+    <section id="partidos" class="seccion">
+
+      <div class="card">
+        <section id="jornada">
+  <h2>⚽ Jornada de la Semana</h2>
+  <div id="listaJornada"></div>
+  <a href="partidos.html" class="btn-ver-todos">Ver todos los partidos</a>
+</section>
+      </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>Comuna Quilloac | Desarrollado por <strong>Xavier Pichasaca</strong> © 2025</p>
+  </footer>
+
+  <script>
+    // MENÚ DASHBOARD
+    const botonesDash = document.querySelectorAll('.btn-dash');
+    const secciones = document.querySelectorAll('.seccion');
+
+    botonesDash.forEach(btn => {
+      btn.addEventListener('click', () => {
+        botonesDash.forEach(b => b.classList.remove('activo'));
+        btn.classList.add('activo');
+
+        const seccion = btn.dataset.seccion;
+        secciones.forEach(s => {
+          s.classList.remove('activo');
+          if(s.id === seccion) s.classList.add('activo');
+        });
+      });
+    });
+
+    // BOTONES COMPARTIR NOTICIAS
+    function compartir(red, texto) {
+      let url = encodeURIComponent(window.location.href);
+      let mensaje = encodeURIComponent(texto);
+      let link = '';
+      switch(red) {
+        case 'facebook':
+          link = `https://www.facebook.com/sharer/sharer.php?u=${url}&quote=${mensaje}`;
+          break;
+        case 'twitter':
+          link = `https://twitter.com/intent/tweet?url=${url}&text=${mensaje}`;
+          break;
+        case 'whatsapp':
+          link = `https://api.whatsapp.com/send?text=${mensaje}%20${url}`;
+          break;
+      }
+      window.open(link, '_blank');
+    }
+  </script>
+  <script type="module" src="noticiaspublico.js"></script>
+  <script type="module" src="tabla.js"></script>
+   <script type="module" src="partidosRealTime.js"></script>
+  <script type="module" src="listaJornada.js"></script>
+  <script type="module" src="tablaresumen.js"></script>
+  <script type="module" src="GoleadorTarjeta.js"></script>
+
+</body>
+</html>

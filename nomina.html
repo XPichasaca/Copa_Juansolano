@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Nómina y Estadísticas — Gestión</title>
+<link rel="stylesheet" href="style.css"/>
+
+<style>
+  body { font-family: "Segoe UI", Roboto, sans-serif; background:#f7f9fb; margin:0; padding:0; color:#222; }
+  h1 { text-align:center; margin:100px 0 20px; color:#003366; }
+  .menu-top { position:fixed; top:0; left:0; right:0; background:#003366; color:#fff; display:flex; justify-content:center; align-items:center; gap:20px; padding:14px; box-shadow:0 2px 8px rgba(0,0,0,0.2); z-index:1000; }
+  .menu-top button { background:transparent; border:none; color:#fff; font-size:15px; font-weight:600; cursor:pointer; padding:8px 14px; border-radius:6px; transition: background 0.3s; }
+  .menu-top button:hover { background: rgba(255,255,255,0.15); }
+  .menu-top button.active { background: #0078d7; }
+  .panel { background:#fff; border-radius:12px; padding:16px 20px; margin:10px 20px 20px; box-shadow:0 2px 6px rgba(0,0,0,0.1); }
+  .row { display:flex; justify-content:space-between; flex-wrap:wrap; align-items:stretch; margin-bottom:10px; }
+  .col { flex:1; margin:10px; background:#fdfdfd; padding:12px; border-radius:10px; box-shadow:0 1px 3px rgba(0,0,0,0.08); }
+  select, button, textarea { font-size:14px; border-radius:6px; padding:8px; border:1px solid #ccc; margin:4px 0; }
+  button { cursor:pointer; font-weight:600; transition:all 0.2s ease-in-out; }
+  button:hover { opacity:0.9; }
+  .btn-primary { background:#0078d7; color:#fff; border:none; }
+  .btn-danger { background:#d72638; color:#fff; border:none; }
+  .tab-content { display:none; }
+  .tab-content.active { display:block; animation: fadeIn 0.3s ease-in-out; }
+  @keyframes fadeIn { from { opacity:0; transform:translateY(5px); } to { opacity:1; transform:translateY(0); } }
+  table { width:100%; border-collapse:collapse; margin-top:10px; background:#fff; }
+  th, td { padding:8px; border-bottom:1px solid #ddd; text-align:center; }
+  th { background:#f0f2f5; }
+  #mensajes { text-align:center; font-weight:600; margin-top:10px; color:#0078d7; }
+  textarea { width:100%; resize:vertical; }
+  .small { font-size:0.9rem; color:#555; }
+  .asistencia-container { display:flex; justify-content:space-between; align-items:center; margin-top:10px; }
+  .asistencia-container button { margin-left:5px; }
+</style>
+</head>
+
+<body>
+  <!-- MENÚ SUPERIOR -->
+  <div class="menu-top">
+    <button class="tab-btn active" data-tab="tabNomina">Registrar Nómina</button>
+    <button class="tab-btn" data-tab="tabEstadisticas">Registrar Estadísticas</button>
+    <button class="tab-btn" data-tab="tabResumen">Resumen del Partido</button>
+  </div>
+
+  <h1>Gestión de Nómina y Estadísticas</h1>
+
+  <div class="panel">
+    <div class="row">
+      <label for="partidoSelect"><strong>Partido:</strong></label>
+      <select id="partidoSelect"><option>Cargando partidos...</option></select>
+      <div id="detallePartido" class="small"></div>
+    </div>
+
+    <div class="row asistencia-container">
+      <div>
+        <strong id="nombreLocal">Equipo Local</strong>
+        <button id="btnNoPresentaLocal" class="btn-danger">No Presenta (0-3)</button>
+      </div>
+      <div>
+        <strong id="nombreVisitante">Equipo Visitante</strong>
+        <button id="btnNoPresentaVisit" class="btn-danger">No Presenta (3-0)</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- NÓMINA -->
+  <div id="tabNomina" class="tab-content active panel">
+    <div class="row">
+      <div class="col">
+        <h3>Equipo Local: <span id="localHeader">-</span></h3>
+        <button id="btnGuardarLocal" class="btn-primary">Registrar Nómina</button>
+        <div id="tablaLocalContainer"></div>
+      </div>
+      <div class="col">
+        <h3>Equipo Visitante: <span id="visitHeader">-</span></h3>
+        <button id="btnGuardarVisit" class="btn-primary">Registrar Nómina</button>
+        <div id="tablaVisitContainer"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ESTADÍSTICAS -->
+  <div id="tabEstadisticas" class="tab-content panel">
+    <div class="row">
+      <div class="small">Cronómetro: <strong id="cronometro">00:00</strong></div>
+      <div>
+        <button id="btnStart" class="btn-primary">Iniciar</button>
+        <button id="btnPause">Pausar</button>
+        <button id="btnFinish" class="btn-danger">Finalizar</button>
+      </div>
+      <div class="small">Marcador: <strong id="marcador">0 - 0</strong></div>
+    </div>
+
+    <div style="margin-top:10px">
+      <h4>Registrar evento</h4>
+      <label>Equipo:</label>
+      <select id="selEquipo"><option value="">--Seleccione equipo--</option></select>
+
+      <label>Jugador:</label>
+      <select id="selJugador"><option value="">--Seleccione jugador--</option></select>
+
+      <div style="display:flex; gap:10px; margin-top:5px;">
+        <div>
+          <label>Jugador Sale:</label>
+          <select id="selJugadorSale"><option value="">--Seleccione--</option></select>
+        </div>
+        <div>
+          <label>Jugador Entra:</label>
+          <select id="selJugadorEntra"><option value="">--Seleccione--</option></select>
+        </div>
+      </div>
+
+      <div id="menuEventos" style="margin-top:5px;">
+        <button data-evento="gol" class="btn-primary">⚽ Gol</button>
+        <button data-evento="amarilla" class="btn-primary">🟨 Amarilla</button>
+        <button data-evento="roja" class="btn-primary">🟥 Roja</button>
+        <button data-evento="entra" class="btn-primary">↑ Entra</button>
+        <button data-evento="sale" class="btn-primary">↓ Sale</button>
+      </div>
+    </div>
+
+    <h4>Historial de eventos</h4>
+    <table id="tablaEventos">
+      <thead><tr><th>Min</th><th>Jugador</th><th>Equipo</th><th>Evento</th></tr></thead>
+      <tbody></tbody>
+    </table>
+
+    <h4>Observaciones:</h4>
+    <div id="resObservacion" class="small" style="border:1px solid #ccc; padding:8px; border-radius:6px;"></div>
+  </div>
+
+  <!-- RESUMEN DEL PARTIDO -->
+  <div id="tabResumen" class="tab-content panel">
+    <h3>Resumen del Partido</h3>
+    <div id="resumenPartidoInfo" class="small"></div>
+
+    <div class="row">
+      <div class="col">
+        <h4>Equipo Local: <span id="resLocal"></span></h4>
+        <div id="resTablaLocal"></div>
+      </div>
+      <div class="col">
+        <h4>Equipo Visitante: <span id="resVisit"></span></h4>
+        <div id="resTablaVisit"></div>
+      </div>
+    </div>
+
+    <h4>Marcador: <span id="resMarcador">0 - 0</span></h4>
+  </div>
+
+  <div id="mensajes"></div>
+
+  <script type="module" src="./partidosEstadistica.js"></script>
+  <script type="module">
+    import { validarAcceso } from "./validarAcceso.js";
+    validarAcceso(window.location.pathname.split("/").pop());
+  </script>
+
+  <script>
+    // Control de pestañas
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById(btn.dataset.tab).classList.add('active');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    });
+  </script>
+</body>
+</html>
