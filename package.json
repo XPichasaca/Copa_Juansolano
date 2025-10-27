@@ -1,0 +1,19 @@
+{
+  "name": "olimpiadas-juan-solano",
+  "version": "1.0.0",
+  "description": "Proyecto del campeonato de fútbol - Olimpiadas Juan Solano",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "keywords": [],
+  "author": "Xavi",
+  "license": "ISC",
+  "dependencies": {
+    "@supabase/supabase-js": "^2.74.0",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0"
+  }
+}
