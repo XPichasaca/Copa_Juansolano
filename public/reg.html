@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Panel Admin Usuarios</title>
+<style>
+  body { font-family: sans-serif; padding: 20px; }
+  input, select { margin: 5px; }
+  table { border-collapse: collapse; margin-top: 20px; width: 100%; }
+  th, td { border: 1px solid #aaa; padding: 8px; text-align: left; }
+</style>
+</head>
+<body>
+
+<h2>Crear Usuario</h2>
+<form id="formCrearUsuario">
+  <input type="email" id="email" placeholder="Correo" required>
+  <input type="password" id="password" placeholder="Contraseña" required>
+  <select id="role" required>
+    <option value="">Seleccione rol</option>
+    <option value="admin">admin</option>
+    <option value="control">control</option>
+    <option value="noticia">noticia</option>
+  </select>
+  <button type="submit">Crear Usuario</button>
+</form>
+
+<h2>Lista de Usuarios</h2>
+<table>
+  <thead>
+    <tr><th>Email</th><th>Rol</th></tr>
+  </thead>
+  <tbody id="tablaUsuarios"></tbody>
+</table>
+
+
+ <script type="module" src="reg.js"></script>
+</body>
+</html>
