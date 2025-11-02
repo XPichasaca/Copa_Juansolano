@@ -10,15 +10,15 @@ const PORT = 3000;
 
 // Conexión a Supabase - Asegúrate de que esta parte esté después de las importaciones
 const supabase = createClient(
-  "https://djjpoztjzbigudzezjcm.supabase.co",  // URL de tu proyecto Supabase
-  "sb_secret_dEby5FLVtfBKnFBxcexKwg_mXHNL9W4"  // Tu clave de API
+  "https://ghstgwywcaxtfdyyjxli.supabase.co",  // URL de tu proyecto Supabase
+  "sb_secret_fv9Pisf5Brhe-svtgL9XHg_OXI74kn4"  // Tu clave de API
 );
 
 // Test de conexión
 (async () => {
   const { data, error } = await supabase.from("jugadores").select("*").limit(1);
   if (error) console.error("❌ Error al conectar con Supabase:", error.message);
-  else console.log("✅ Conexión exitosa a Supabase. Ejemplo de datos:", data);
+  else console.log("✅ Conexión exitosa a Supabases. Ejemplo de datos:", data);
 })();
 
 app.use(cors());
