@@ -28,6 +28,114 @@
     .botones-compartir button:hover {
       transform: scale(1.2);
     }
+    #partidosContainer1 {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-width: 900px;
+  margin: 10px auto;
+  font-family: Arial, sans-serif;
+}
+
+.partido-card {
+  border-radius: 6px;
+  background-color: #beb6b6;
+  box-shadow: 0 1px 2px rgba(167, 247, 28, 0.1);
+  padding: 2px 4px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.partido-card:hover {
+  background-color: #726565;
+}
+
+.partido-resumen {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+  height: 30px; /* compacto */
+}
+
+.partido-detalle {
+  display: none;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 4px;
+  font-size: 13px;
+}
+
+.partido-detalle table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.partido-detalle th, .partido-detalle td {
+  border: 1px solid #ccc;
+  padding: 2px 4px;
+  text-align: center;
+}
+
+.evento {
+  display: inline-block;
+  padding: 0 3px;
+  border-radius: 3px;
+}
+
+.evento.gol { background-color: #ffdd57; }
+.evento.amarilla { background-color: #ffe066; }
+.evento.roja { background-color: #ff6b6b; color: white; }
+#partidosContainer1 {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-width: 900px;
+  margin: 10px auto;
+  font-family: Arial, sans-serif;
+}
+
+.partido-card {
+  border-radius: 6px;
+  background-color: #d3b4b4;
+  padding: 6px 8px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.partido-card:hover { background-color: #e0e0e0; }
+
+.partido-resumen {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 14px;
+  gap: 6px;
+}
+
+.equipo-info {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.equipo-logo {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+}
+
+.partido-detalle {
+  display: none;
+  margin-top: 4px;
+  font-size: 13px;
+}
+
+.partido-detalle table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
   </style>
 </head>
 <body class="fondo-gradiente">
@@ -58,17 +166,19 @@
     <img src="img/Quilloac.jpg" alt="Escudo" class="logo-header" />
   </header>
 
+
   <!-- CONTENIDO PRINCIPAL -->
   <main class="contenedor">
+     <div id="partidosContainer1">Cargando...</div>
     <!-- MENÚ DASHBOARD -->
     <section class="menu-dashboard">
       <button class="btn-dash activo" data-seccion="noticias-seccion">📰 Noticias</button>
       <button class="btn-dash" data-seccion="posiciones-seccion">🏆 Posiciones</button>
       <button class="btn-dash" data-seccion="goleadores-seccion">⚽ Goleadores</button>
       <button class="btn-dash" data-seccion="tarjetas-seccion">🟨 Tarjetas</button>
-      <button class="btn-dash" data-seccion="partidos">📅 Partidos</button>
+      <button class="btn-dash" data-seccion="partidos">📅 Partidos de la Jornada</button>
     </section>
-
+    
 <!-- NOTICIAS -->
 <section id="noticias-seccion" class="seccion activo">
   <section class="card">
@@ -125,42 +235,26 @@
       </div>
     </section>
 
-    <!-- GOLEADORES -->
-    <section id="goleadores-seccion" class="seccion">
-      <div class="card">
-        <h2>⚽ Tabla de Goleadores</h2>
-        <table id="tablaGoleadores">
-          <thead>
-            <tr>
-              <th>Jugador</th>
-              <th>Equipo</th>
-              <th>Goles</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
-      </div>
-    </section>
+   <!-- GOLEADORES -->
+<section id="goleadores-seccion" class="seccion">
+  <div class="card">
+    <h2>⚽ Tabla de Goleadores</h2>
+    <div id="contenedorGoleadores" class="contenedor-dos-columnas">
+      <!-- Se cargan automáticamente desde GoleadorTarjeta.js -->
+    </div>
+  </div>
+</section>
 
-    <!-- TARJETAS -->
-    <section id="tarjetas-seccion" class="seccion">
-      <div class="card">
-        <h2>🟨 Tabla de Amonestados</h2>
-        <table id="tablaAmonestados">
-          <thead>
-            <tr>
-              <th>Jugador</th>
-              <th>Equipo</th>
-              <th>Detalles</th>
-              <th>Total</th>
-              <th>Historial</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
-        <div id="contenedorHistorial"></div>
-      </div>
-    </section>
+<!-- TARJETAS -->
+<section id="tarjetas-seccion" class="seccion">
+  <div class="card">
+    <h2>🟨 Tabla de Amonestados</h2>
+    <div id="contenedorTarjetas" class="contenedor-dos-columnas">
+      <!-- Se cargan automáticamente desde GoleadorTarjeta.js -->
+    </div>
+  </div>
+</section>
+
 
     <!-- PARTIDOS -->
     <section id="partidos" class="seccion">
@@ -188,6 +282,7 @@
   <script type="module" src="listaJornada.js"></script>
   <script type="module" src="tablaresumen.js"></script>
   <script type="module" src="GoleadorTarjeta.js"></script>
+  <script type="module" src="partidoResumen.js"></script>
 
   <!-- ========================= -->
   <!-- ⚙️ Script de Dashboard y Compartir -->

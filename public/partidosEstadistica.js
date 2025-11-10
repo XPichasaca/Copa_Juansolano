@@ -24,6 +24,9 @@ const resTablaVisit = document.getElementById("resTablaVisit");
 const resMarcador = document.getElementById("resMarcador");
 const cronometroEl = document.getElementById("cronometro");
 const mensajes = document.getElementById("mensajes");
+const btnStart = document.getElementById('btnStart');
+const btnPause = document.getElementById('btnPause');
+const btnFinish = document.getElementById('btnFinish');
 
 // Estado
 let partido = null;
@@ -41,17 +44,6 @@ function actualizarCronometro() {
   const ss = String(minutos%60).padStart(2,'0');
   cronometroEl.textContent = `${mm}:${ss}`;
 }
-
-// Controles de cronómetro
-document.getElementById('btnStart').addEventListener('click', ()=>{
-  if(cronometroInterval) clearInterval(cronometroInterval);
-  cronometroInterval = setInterval(()=>{
-    minutos++;
-    actualizarCronometro();
-  },60000);
-});
-document.getElementById('btnPause').addEventListener('click', ()=>{ clearInterval(cronometroInterval); });
-document.getElementById('btnFinish').addEventListener('click', ()=>{ clearInterval(cronometroInterval); });
 
 // Suspensiones por tipo de evento
 const SUSPENSIONES = { doble_amarilla: 1, roja_directa: 2 };
@@ -71,17 +63,16 @@ async function loadPartidos() {
     .select(`id, fecha, categoria, estado, marcador_local, marcador_visitante,
              equipo_local:equipo_local_id(id,nombre),
              equipo_visitante:equipo_visitante_id(id,nombre)`)
-    .eq("estado", "pendiente")
     .order("fecha", { ascending: true });
 
   if(error) { console.error(error); partidoSelect.innerHTML = `<option>Error cargando partidos</option>`; return; }
-  if(!data || data.length === 0) { partidoSelect.innerHTML = `<option>No hay partidos pendientes</option>`; return; }
+  if(!data || data.length === 0) { partidoSelect.innerHTML = `<option>No hay partidos</option>`; return; }
 
   partidoSelect.innerHTML = `<option value="">-- Seleccione partido --</option>`;
   data.forEach(p => {
     const opt = document.createElement("option");
     opt.value = JSON.stringify(p);
-    opt.textContent = `${p.equipo_local?.nombre || 'Local'} vs ${p.equipo_visitante?.nombre || 'Visitante'} — ${new Date(p.fecha).toLocaleString()}`;
+    opt.textContent = `${p.equipo_local?.nombre || 'Local'} vs ${p.equipo_visitante?.nombre || 'Visitante'} — ${new Date(p.fecha).toLocaleString()} (${p.estado})`;
     partidoSelect.appendChild(opt);
   });
 }
@@ -151,7 +142,7 @@ function renderNominaTables() {
   tablaVisitContainer.innerHTML = crearTabla(jugadoresVisit);
 }
 
-// --- GUARDAR NÓMINA SOLO SELECCIONADOS ---
+// --- GUARDAR NÓMINA ---
 async function guardarNomina(equipo) {
   if (!partido) return showMsg("Selecciona un partido primero");
   let jugadores = equipo === 'local' ? jugadoresLocal : jugadoresVisit;
@@ -166,7 +157,7 @@ async function guardarNomina(equipo) {
         suplente: suplenteEl?.checked || false
       };
     })
-    .filter(j => j.titular || j.suplente) // solo seleccionados
+    .filter(j => j.titular || j.suplente)
     .map(j => ({ ...j, partido_id: partido.id }));
 
   if (insertData.length === 0) return showMsg("No hay jugadores seleccionados para guardar.");
@@ -188,11 +179,10 @@ async function guardarNomina(equipo) {
   }
 }
 
-// Botones guardar nómina
 btnGuardarLocal.addEventListener('click', ()=>guardarNomina('local'));
 btnGuardarVisit.addEventListener('click', ()=>guardarNomina('visitante'));
 
-// --- POBLAR SELECT DE EQUIPO ---
+// --- POBLAR SELECTS ---
 function populateEquipoSelect(){
   selEquipo.innerHTML = `<option value="">--Seleccione equipo--</option>
     <option value="local">${partido.equipo_local.nombre}</option>
@@ -200,7 +190,6 @@ function populateEquipoSelect(){
   selJugador.innerHTML = `<option value="">--Seleccione jugador--</option>`;
 }
 
-// --- POBLAR SELECTS DE CAMBIO ---
 function populateCambioSelects(){
   selJugadorEntra.innerHTML = `<option value="">--Seleccione--</option>`;
   selJugadorSale.innerHTML = `<option value="">--Seleccione--</option>`;
@@ -210,7 +199,6 @@ function populateCambioSelects(){
   });
 }
 
-// --- FILTRAR JUGADORES POR EQUIPO ---
 selEquipo.addEventListener("change", ()=>{
   const equipo = selEquipo.value;
   selJugador.innerHTML = `<option value="">--Seleccione jugador--</option>`;
@@ -225,51 +213,85 @@ selEquipo.addEventListener("change", ()=>{
   });
 });
 
-// --- REGISTRAR EVENTO ---
-menuEventos.querySelectorAll("button").forEach(btn=>{
-  btn.addEventListener("click", async ()=>{
+// --- REGISTRAR EVENTO CON ACTUALIZACIÓN DE MARCADOR EN TIEMPO REAL ---
+menuEventos.querySelectorAll("button").forEach(btn => {
+  btn.addEventListener("click", async () => {
+    if (!partido) return showMsg("Selecciona un partido primero");
     const jugador_id = parseInt(selJugador.value);
-    if(!jugador_id) return showMsg("Selecciona jugador");
+    if (!jugador_id) return showMsg("Selecciona un jugador");
 
-    const tipo = btn.dataset.evento; 
+    const tipo = btn.dataset.evento;
     let por_jugador_id = null;
     const minuto = minutos;
 
-    // Validar tarjetas
-    if(tipo==="amarilla" || tipo==="roja"){
-      const tarjetas = eventosPartido.filter(e=>e.jugador_id===jugador_id && ["amarilla","roja_directa","roja_doble_amarilla"].includes(e.tipo_evento));
-      const amarillas = tarjetas.filter(e=>e.tipo_evento==="amarilla").length;
-      const rojas = tarjetas.filter(e=>["roja_directa","roja_doble_amarilla"].includes(e.tipo_evento)).length;
+    // Validar tarjetas y cambios
+    if (tipo === "amarilla" || tipo === "roja") {
+      const tarjetas = eventosPartido.filter(e =>
+        e.jugador_id === jugador_id &&
+        ["amarilla", "roja_directa", "roja_doble_amarilla"].includes(e.tipo_evento)
+      );
+      const amarillas = tarjetas.filter(e => e.tipo_evento === "amarilla").length;
+      const rojas = tarjetas.filter(e => ["roja_directa", "roja_doble_amarilla"].includes(e.tipo_evento)).length;
 
-      if(tipo==="amarilla"){
-        if(amarillas>=2 || rojas>=1) return showMsg("No puede recibir más tarjetas");
-        if(amarillas===1){
-          await supabase.from("estadisticas").insert([{partido_id:partido.id,jugador_id,tipo_evento:"roja_doble_amarilla",minuto,por_jugador_id:null}]);
-          await supabase.from("sanciones").insert([{jugador_id,partido_id:partido.id,tipo:"doble_amarilla",partidos_suspendidos:SUSPENSIONES.doble_amarilla}]);
+      if (tipo === "amarilla") {
+        if (amarillas >= 2 || rojas >= 1) return showMsg("No puede recibir más tarjetas");
+        if (amarillas === 1) {
+          await supabase.from("estadisticas").insert([{
+            partido_id: partido.id,
+            jugador_id,
+            tipo_evento: "roja_doble_amarilla",
+            minuto,
+            por_jugador_id: null
+          }]);
+          await supabase.from("sanciones").insert([{
+            jugador_id,
+            partido_id: partido.id,
+            tipo: "doble_amarilla",
+            partidos_suspendidos: SUSPENSIONES.doble_amarilla
+          }]);
           showMsg("Segunda amarilla → Roja doble amarilla ⚠️");
           await loadSancionados(); renderNominaTables(); await renderEventosHistory(); renderResumenPartido();
           return;
         }
       }
+
       if(tipo==="roja" && rojas>=1) return showMsg("Jugador ya tiene roja");
+      if(tipo==="roja") {
+        await supabase.from("sanciones").insert([{
+          jugador_id, partido_id: partido.id, tipo:"roja_directa", partidos_suspendidos: SUSPENSIONES.roja_directa
+        }]);
+      }
     }
 
-    // Cambios
-    if(tipo==="entra" || tipo==="sale"){
+    if(tipo==="entra" || tipo==="sale") {
       const selPor = tipo==="entra"?selJugadorSale:selJugadorEntra;
       if(selPor.value) por_jugador_id = parseInt(selPor.value);
     }
 
     // Insertar evento
-    const { error } = await supabase.from("estadisticas").insert([{partido_id:partido.id,jugador_id,tipo_evento:tipo,minuto,por_jugador_id}]);
-    if(error){ console.error(error); return showMsg("Error registrando evento"); }
+    const { error: errInsert } = await supabase.from("estadisticas").insert([{
+      partido_id: partido.id, jugador_id, tipo_evento: tipo, minuto, por_jugador_id
+    }]);
+    if(errInsert){ console.error(errInsert); return showMsg("Error registrando evento"); }
 
-    // Insertar sanción roja directa
-    if(tipo==="roja"){
-      await supabase.from("sanciones").insert([{jugador_id,partido_id:partido.id,tipo:"roja_directa",partidos_suspendidos:SUSPENSIONES.roja_directa}]);
+    // Actualizar marcador si es gol
+    if(tipo==="gol") {
+      eventosPartido.push({ jugador_id, tipo_evento: "gol" });
+
+      const golesLocal = eventosPartido.filter(e => jugadoresLocal.some(j=>j.id===e.jugador_id) && e.tipo_evento==='gol').length;
+      const golesVisit = eventosPartido.filter(e => jugadoresVisit.some(j=>j.id===e.jugador_id) && e.tipo_evento==='gol').length;
+
+      const { error: errMarcador } = await supabase.from("partidos")
+        .update({ marcador_local: golesLocal, marcador_visitante: golesVisit })
+        .eq("id", partido.id);
+
+      if(errMarcador) console.error("Error actualizando marcador:", errMarcador);
     }
 
-    await loadSancionados(); renderNominaTables(); await renderEventosHistory(); renderResumenPartido();
+    await loadSancionados();
+    renderNominaTables();
+    await renderEventosHistory();
+    renderResumenPartido();
   });
 });
 
@@ -291,7 +313,6 @@ async function renderEventosHistory(){
 // --- RENDER RESUMEN ---
 function renderResumenPartido(){
   function contar(evts, jugadorId, tipo){ return evts.filter(e=>e.jugador_id===jugadorId && e.tipo_evento===tipo).length; }
-
   function tarjetas(jugadorId) {
     const evts = eventosPartido.filter(e => e.jugador_id === jugadorId);
     const amarillas = evts.filter(e => e.tipo_evento === "amarilla").length;
@@ -303,12 +324,10 @@ function renderResumenPartido(){
     if (amarillas === 1) return "🟨";
     return "";
   }
-
   function cambios(evts,jugadorId){
     return evts.filter(e=>['entra','sale'].includes(e.tipo_evento) && e.jugador_id===jugadorId)
       .map(e=>`${e.tipo==='entra'?'↑':'↓'}(${e.minuto}' por ${e.por_jugador_id||'-'})`).join(' ');
   }
-
   function crearTabla(jugadores){
     return `<table>
       <thead><tr><th>Jugador</th><th>Dorsal</th><th>Gol</th><th>Tarjetas</th><th>Entra</th><th>Sale</th></tr></thead>
@@ -322,7 +341,6 @@ function renderResumenPartido(){
       </tr>`).join('')}</tbody>
     </table>`;
   }
-
   resTablaLocal.innerHTML = crearTabla(jugadoresLocal);
   resTablaVisit.innerHTML = crearTabla(jugadoresVisit);
 
@@ -330,6 +348,56 @@ function renderResumenPartido(){
   const golesVisit = eventosPartido.filter(e=>jugadoresVisit.some(j=>j.id===e.jugador_id) && e.tipo_evento==='gol').length;
   resMarcador.textContent = `${golesLocal} - ${golesVisit}`;
 }
+
+// --- INICIAR PARTIDO ---
+btnStart.addEventListener('click', async () => {
+  if (!partido) return showMsg("⚠️ Selecciona un partido antes de iniciar");
+
+  if(partido.estado !== "en_vivo") {
+    try {
+      const { data, error } = await supabase.from("partidos")
+        .update({ estado: "en_vivo" })
+        .eq("id", partido.id)
+        .select();
+      if(error) throw error;
+      partido.estado = "en_vivo";
+      showMsg(`✅ Partido "${partido.equipo_local.nombre} vs ${partido.equipo_visitante.nombre}" EN VIVO`);
+    } catch(err) { console.error(err); showMsg("❌ No se pudo actualizar el estado del partido"); }
+  }
+
+  if (cronometroInterval) clearInterval(cronometroInterval);
+  cronometroInterval = setInterval(() => { minutos++; actualizarCronometro(); }, 60000);
+});
+
+// --- PAUSAR CRONÓMETRO ---
+btnPause.addEventListener('click', ()=>{ clearInterval(cronometroInterval); });
+
+// --- FINALIZAR PARTIDO ---
+btnFinish.addEventListener('click', async ()=>{
+  if(!partido) return showMsg("⚠️ Selecciona un partido");
+  clearInterval(cronometroInterval);
+  try {
+    const golesLocal = eventosPartido.filter(e=>jugadoresLocal.some(j=>j.id===e.jugador_id) && e.tipo_evento==='gol').length;
+    const golesVisit = eventosPartido.filter(e=>jugadoresVisit.some(j=>j.id===e.jugador_id) && e.tipo_evento==='gol').length;
+    const { error } = await supabase.from("partidos")
+      .update({ estado: "finalizado", marcador_local: golesLocal, marcador_visitante: golesVisit })
+      .eq("id", partido.id);
+    if(error) throw error;
+    partido.estado = "finalizado";
+    resMarcador.textContent = `${golesLocal} - ${golesVisit}`;
+    showMsg("✅ Partido finalizado");
+  } catch(err){ console.error(err); showMsg("❌ No se pudo finalizar el partido"); }
+});
+
+// --- SUSCRIPCIÓN TIEMPO REAL PARTIDOS ---
+supabase
+  .channel('realtime-partidos')
+  .on('postgres_changes', { event: '*', schema: 'public', table: 'partidos' }, payload => {
+    if (partido && payload.new.id === partido.id) {
+      resMarcador.textContent = `${payload.new.marcador_local} - ${payload.new.marcador_visitante}`;
+    }
+  })
+  .subscribe();
 
 // ---------- INICIAL ----------
 loadPartidos();

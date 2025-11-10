@@ -211,17 +211,7 @@ textarea {
       <div id="detallePartido" class="small"></div>
     </div>
 
-    <div class="row asistencia-container">
-      <div>
-        <strong id="nombreLocal">Equipo Local</strong>
-        <button id="btnNoPresentaLocal" class="btn-danger">No Presenta (0-3)</button>
-      </div>
-      <div>
-        <strong id="nombreVisitante">Equipo Visitante</strong>
-        <button id="btnNoPresentaVisit" class="btn-danger">No Presenta (3-0)</button>
-      </div>
-    </div>
-  </div>
+  
 
   <!-- NÓMINA -->
   <div id="tabNomina" class="tab-content active panel">
@@ -239,16 +229,72 @@ textarea {
     </div>
   </div>
 
+
+
+
+  
   <!-- ESTADÍSTICAS -->
   <div id="tabEstadisticas" class="tab-content panel">
     <div class="row">
-      <div class="small">Cronómetro: <strong id="cronometro">00:00</strong></div>
+       <!-- CRONÓMETRO Y MARCADOR -->
+<div id="marcadorCronometro">
+  <span>Marcador: <strong id="resMarcador">0 - 0</strong></span> |
+  <span>Cronómetro: <strong id="cronometro">00:00</strong></span>
+  <button id="btnStart">Iniciar</button>
+  <button id="btnPause">Pausar</button>
+  <button id="btnFinish">Finalizar</button>
+
+    <div class="row asistencia-container">
       <div>
-        <button id="btnStart" class="btn-primary">Iniciar</button>
-        <button id="btnPause">Pausar</button>
-        <button id="btnFinish" class="btn-danger">Finalizar</button>
+        <strong id="nombreLocal">Equipo Local</strong>
+        <button id="btnNoPresentaLocal" class="btn-danger">No Presenta (0-3)</button>
       </div>
-      <div class="small">Marcador: <strong id="marcador">0 - 0</strong></div>
+      <div>
+        <strong id="nombreVisitante">Equipo Visitante</strong>
+        <button id="btnNoPresentaVisit" class="btn-danger">No Presenta (3-0)</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+   
+<script>
+  // Variables del cronómetro
+  let segundos = 0;
+  let cronometroInterval = null;
+
+  const cronometroEl = document.getElementById('cronometro');
+  const btnStart = document.getElementById('btnStart');
+  const btnPause = document.getElementById('btnPause');
+  const btnFinish = document.getElementById('btnFinish');
+
+  function actualizarCronometro() {
+    const minutos = Math.floor(segundos / 60);
+    const seg = segundos % 60;
+    cronometroEl.textContent = `${String(minutos).padStart(2,'0')}:${String(seg).padStart(2,'0')}`;
+  }
+
+  btnStart.addEventListener('click', () => {
+    if(cronometroInterval) clearInterval(cronometroInterval);
+    cronometroInterval = setInterval(() => {
+      segundos++;
+      actualizarCronometro();
+    }, 1000); // aumenta cada segundo
+  });
+
+  btnPause.addEventListener('click', () => {
+    clearInterval(cronometroInterval);
+  });
+
+  btnFinish.addEventListener('click', () => {
+    clearInterval(cronometroInterval);
+    segundos = 0;
+    actualizarCronometro();
+  });
+</script>
+
+      
     </div>
 
     <div style="margin-top:10px">
@@ -305,12 +351,14 @@ textarea {
       </div>
     </div>
 
-    <h4>Marcador: <span id="resMarcador">0 - 0</span></h4>
+    <div id="marcadorCronometro">
+  <span>Marcador: <strong id="resMarcador">0 - 0</strong></span> |
   </div>
 
   <div id="mensajes"></div>
 
   <script type="module" src="./partidosEstadistica.js"></script>
+
   <script type="module">
     import { validarAcceso } from "./validaAcceso.js";
     validarAcceso(window.location.pathname.split("/").pop());

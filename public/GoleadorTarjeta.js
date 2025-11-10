@@ -1,148 +1,201 @@
-import { supabase } from "./supabasePublico.js"; 
+import { supabase } from "./script.js"; // conexión Supabase
 
-const tablaGoleadores = document.querySelector("#tablaGoleadores tbody");
-const tablaAmonestados = document.querySelector("#tablaAmonestados tbody");
-const contenedorHistorial = document.getElementById("contenedorHistorial");
+// Referencias HTML
+const contenedorGoleadores = document.querySelector("#contenedorGoleadores");
+const contenedorTarjetas = document.querySelector("#contenedorTarjetas");
 
-async function cargarDatos() {
-  const { data: estadisticas, error } = await supabase
-    .from("estadisticas")
-    .select(`
-      id,
-      tipo_evento,
-      minuto,
-      jugador:jugador_id(id, nombre, equipo:equipo_id(nombre)),
-      partido:partido_id(id, fecha, equipo_local:equipo_local_id(nombre), equipo_visitante:equipo_visitante_id(nombre))
-    `);
+// ==========================
+// 🔹 CARGAR ESTADÍSTICAS
+// ==========================
+async function cargarEstadisticas() {
+  try {
+    const { data, error } = await supabase
+      .from("estadisticas")
+      .select(`
+        id,
+        tipo_evento,
+        minuto,
+        jugador:jugador_id (
+          id,
+          nombre,
+          categoria,
+          equipo:equipo_id (
+            id,
+            nombre,
+            logo_url
+          )
+        ),
+        partido:partido_id (
+          id,
+          equipo_local:equipo_local_id (nombre),
+          equipo_visitante:equipo_visitante_id (nombre)
+        )
+      `);
 
-  if (error) {
-    console.error("Error al cargar estadísticas:", error.message);
-    return;
-  }
+    if (error) throw error;
 
-  const goles = {};
-  const tarjetasPorJugador = {};
+    const mapaGoles = new Map();
+    const mapaTarjetas = new Map();
 
-  estadisticas.forEach(est => {
-    const jugadorId = est.jugador?.id;
-    const nombre = est.jugador?.nombre || "Desconocido";
-    const equipo = est.jugador?.equipo?.nombre || "Sin equipo";
+    data.forEach(e => {
+      if (!e.jugador) return;
+      const j = e.jugador;
+      const equipo = j.equipo || {};
+      const partido = e.partido
+        ? `${e.partido.equipo_local?.nombre || "?"} vs ${e.partido.equipo_visitante?.nombre || "?"}`
+        : "Sin partido";
 
-    if (!jugadorId) return;
+      const clave = j.id;
 
-    // Goles
-    if (est.tipo_evento === "gol") {
-      if (!goles[jugadorId]) goles[jugadorId] = { nombre, equipo, total: 0 };
-      goles[jugadorId].total += 1;
-    }
+      // ⚽ Goles
+      if (e.tipo_evento === "gol") {
+        if (!mapaGoles.has(clave)) {
+          mapaGoles.set(clave, {
+            jugador: j.nombre,
+            categoria: j.categoria || "Sin categoría",
+            equipo: equipo.nombre,
+            logo: equipo.logo_url || "img/logo.png",
+            goles: [],
+          });
+        }
+        mapaGoles.get(clave).goles.push({ minuto: e.minuto, partido });
+      }
 
-    // Inicializar jugador en tarjetas
-    if (!tarjetasPorJugador[jugadorId]) tarjetasPorJugador[jugadorId] = { nombre, equipo, amarilla: 0, doble: 0, roja: 0 };
-
-    // Clasificar tarjetas correctamente
-    switch (est.tipo_evento) {
-      case "amarilla":
-        tarjetasPorJugador[jugadorId].amarilla += 1;
-        break;
-      case "roja_directa":
-        tarjetasPorJugador[jugadorId].roja += 1;
-        break;
-      case "roja_doble_amarilla":
-        tarjetasPorJugador[jugadorId].doble += 1;
-        // Restar las 2 amarillas que generaron esta roja
-        tarjetasPorJugador[jugadorId].amarilla -= 2;
-        if (tarjetasPorJugador[jugadorId].amarilla < 0) tarjetasPorJugador[jugadorId].amarilla = 0;
-        break;
-    }
-  });
-
-  // Mostrar goleadores
-  tablaGoleadores.innerHTML = "";
-  Object.values(goles)
-    .sort((a, b) => b.total - a.total)
-    .forEach(g => {
-      const fila = document.createElement("tr");
-      fila.innerHTML = `<td>${g.nombre}</td><td>${g.equipo}</td><td>${g.total}</td>`;
-      tablaGoleadores.appendChild(fila);
+      // 🟨 Tarjetas
+      if (["amarilla", "roja_directa", "roja_doble_amarilla"].includes(e.tipo_evento)) {
+        if (!mapaTarjetas.has(clave)) {
+          mapaTarjetas.set(clave, {
+            jugador: j.nombre,
+            categoria: j.categoria || "Sin categoría",
+            equipo: equipo.nombre,
+            logo: equipo.logo_url || "img/logo.png",
+            tarjetas: [],
+          });
+        }
+        mapaTarjetas.get(clave).tarjetas.push({ tipo: e.tipo_evento, minuto: e.minuto, partido });
+      }
     });
 
-  // Mostrar tarjetas de forma limpia
-  tablaAmonestados.innerHTML = "";
-  Object.entries(tarjetasPorJugador).forEach(([jugadorId, t]) => {
-    const tarjetas = [];
+    // Clasificar por categoría
+    const golesMasculino = [...mapaGoles.values()].filter(g => g.categoria?.toLowerCase().includes("masculino"));
+    const golesFemenino = [...mapaGoles.values()].filter(g => g.categoria?.toLowerCase().includes("femenino"));
 
-    // Amarillas simples solo si quedan, sin número delante
-    if (t.amarilla > 0) tarjetas.push("🟨");
+    const tarjetasMasculino = [...mapaTarjetas.values()].filter(g => g.categoria?.toLowerCase().includes("masculino"));
+    const tarjetasFemenino = [...mapaTarjetas.values()].filter(g => g.categoria?.toLowerCase().includes("femenino"));
 
-    // Dobles amarillas
-    for (let i = 0; i < t.doble; i++) {
-      tarjetas.push("🟨🟨🟥");
-    }
+    renderGoleadores(golesMasculino, golesFemenino);
+    renderTarjetas(tarjetasMasculino, tarjetasFemenino);
 
-    // Rojas directas
-    for (let i = 0; i < t.roja; i++) {
-      tarjetas.push("🟥");
-    }
-
-    if (tarjetas.length === 0) return;
-
-    const fila = document.createElement("tr");
-    fila.innerHTML = `
-      <td>${t.nombre}</td>
-      <td>${t.equipo}</td>
-      <td>${tarjetas.join(", ")}</td>
-      <td><input type="checkbox" class="mostrarHistorial" data-jugador-id="${jugadorId}" /> Mostrar historial</td>
-    `;
-    tablaAmonestados.appendChild(fila);
-  });
+  } catch (err) {
+    console.error("❌ Error al cargar estadísticas:", err);
+  }
 }
 
-// Mostrar historial completo por jugador
-tablaAmonestados.addEventListener("change", async (e) => {
-  if (e.target.classList.contains("mostrarHistorial")) {
-    const jugadorId = e.target.dataset.jugadorId;
+// ==========================
+// ⚽ RENDER GOLEADORES
+// ==========================
+function renderGoleadores(masculino, femenino) {
+  contenedorGoleadores.innerHTML = `
+    <div class="columna">
+      <h3>⚽ Masculino</h3>
+      <table class="tabla">
+        <thead><tr><th>Jugador</th><th>Equipo</th><th>Goles</th></tr></thead>
+        <tbody>${crearFilasGoles(masculino)}</tbody>
+      </table>
+    </div>
+    <div class="columna">
+      <h3>⚽ Femenino</h3>
+      <table class="tabla">
+        <thead><tr><th>Jugador</th><th>Equipo</th><th>Goles</th></tr></thead>
+        <tbody>${crearFilasGoles(femenino)}</tbody>
+      </table>
+    </div>
+  `;
+}
 
-    if (e.target.checked) {
-      const { data, error } = await supabase
-        .from("estadisticas")
-        .select(`
-          tipo_evento,
-          minuto,
-          partido:partido_id(
-            fecha,
-            equipo_local:equipo_local_id(nombre),
-            equipo_visitante:equipo_visitante_id(nombre)
-          )
-        `)
-        .eq("jugador_id", jugadorId);
+function crearFilasGoles(lista) {
+  return lista
+    .sort((a, b) => b.goles.length - a.goles.length)
+    .map((g, i) => `
+      <tr>
+        <td><div class="jugador-info"><img src="${g.logo}" class="logo-equipo"> ${g.jugador}</div></td>
+        <td>${g.equipo}</td>
+        <td>
+          ${g.goles.length}
+          <input type="checkbox" id="goles-${i}" class="chk-historial">
+          <div class="historial hidden">
+            ${g.goles.map(e => `⚽ ${e.minuto}' — <i>${e.partido}</i>`).join("<br>")}
+          </div>
+        </td>
+      </tr>
+    `).join("");
+}
 
-      if (error) {
-        console.error("Error al cargar historial:", error.message);
-        contenedorHistorial.innerHTML = "<p>Error cargando historial.</p>";
-        return;
-      }
+// ==========================
+// 🟥 RENDER TARJETAS
+// ==========================
+function renderTarjetas(masculino, femenino) {
+  contenedorTarjetas.innerHTML = `
+    <div class="columna">
+      <h3>🟨 Masculino</h3>
+      <table class="tabla">
+        <thead><tr><th>Jugador</th><th>Equipo</th><th>Detalles</th><th>Total</th></tr></thead>
+        <tbody>${crearFilasTarjetas(masculino)}</tbody>
+      </table>
+    </div>
+    <div class="columna">
+      <h3>🟨 Femenino</h3>
+      <table class="tabla">
+        <thead><tr><th>Jugador</th><th>Equipo</th><th>Detalles</th><th>Total</th></tr></thead>
+        <tbody>${crearFilasTarjetas(femenino)}</tbody>
+      </table>
+    </div>
+  `;
+}
 
-      if (!data.length) {
-        contenedorHistorial.innerHTML = "<p>No hay eventos registrados para este jugador.</p>";
-        return;
-      }
+function crearFilasTarjetas(lista) {
+  return lista
+    .sort((a, b) => b.tarjetas.length - a.tarjetas.length)
+    .map((t, i) => {
+      const detalles = t.tarjetas.map(e => {
+        if (e.tipo === "amarilla") return "🟨";
+        if (e.tipo === "roja_directa") return "🟥";
+        return "🟨🟨🟥";
+      }).join(" ");
 
-      data.sort((a, b) => new Date(a.partido.fecha) - new Date(b.partido.fecha));
+      const historial = t.tarjetas
+        .map(e => {
+          const icon = e.tipo === "amarilla" ? "🟨" : e.tipo === "roja_directa" ? "🟥" : "🟨🟨🟥";
+          return `${icon} ${e.minuto}' — <i>${e.partido}</i>`;
+        })
+        .join("<br>");
 
-      let html = `<h3>Historial de eventos</h3><ul>`;
-      data.forEach(ev => {
-        const fecha = new Date(ev.partido.fecha).toLocaleDateString();
-        const local = ev.partido.equipo_local?.nombre || "Local";
-        const visitante = ev.partido.equipo_visitante?.nombre || "Visitante";
-        html += `<li>${fecha} - ${local} vs ${visitante} - ${ev.tipo_evento.toUpperCase()} minuto ${ev.minuto}</li>`;
-      });
-      html += "</ul>";
-      contenedorHistorial.innerHTML = html;
-    } else {
-      contenedorHistorial.innerHTML = "";
-    }
+      return `
+        <tr>
+          <td><div class="jugador-info"><img src="${t.logo}" class="logo-equipo"> ${t.jugador}</div></td>
+          <td>${t.equipo}</td>
+          <td>${detalles}</td>
+          <td>
+            ${t.tarjetas.length}
+            <input type="checkbox" id="tarjetas-${i}" class="chk-historial">
+            <div class="historial hidden">${historial}</div>
+          </td>
+        </tr>
+      `;
+    }).join("");
+}
+
+// ==========================
+// 🎯 EVENTOS DE CHECKBOX
+// ==========================
+document.addEventListener("change", e => {
+  if (e.target.classList.contains("chk-historial")) {
+    const detalle = e.target.nextElementSibling;
+    detalle.classList.toggle("hidden", !e.target.checked);
   }
 });
 
-// Inicializar carga
-cargarDatos();
+// ==========================
+// 🚀 INICIO
+// ==========================
+cargarEstadisticas();

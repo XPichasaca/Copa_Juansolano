@@ -1,83 +1,79 @@
-import { supabase } from "./supabasePublico.js";
+import { supabase } from "./script.js"; // conexión Supabase
 
-async function cargarTablaPosiciones() {
-  const { data: partidos, error } = await supabase
-    .from("partidos")
-    .select(`
-      id, 
-      equipo_local_id, 
-      equipo_visitante_id, 
-      marcador_local, 
-      marcador_visitante,
-      estado,
-      equipos_local:equipo_local_id(nombre),
-      equipos_visitante:equipo_visitante_id(nombre)
-    `);
+const tablaMasculino = document.getElementById("tablaPosicionesMasculino").querySelector("tbody");
+const tablaFemenino = document.getElementById("tablaPosicionesFemenino").querySelector("tbody");
 
-  if (error) {
-    console.error("Error al cargar partidos:", error.message);
-    return;
-  }
+async function cargarPosiciones() {
+  try {
+    const { data, error } = await supabase
+      .from("posiciones")
+      .select(`
+        id,
+        equipo:equipo_id (
+          id,
+          nombre,
+          logo_url
+        ),
+        genero,
+        PJ,
+        PG,
+        PE,
+        PP,
+        GF,
+        GC,
+        DG,
+        PTS
+      `)
+      .order("PTS", { ascending: false });
 
-  const posiciones = {};
+    if (error) throw error;
 
-  partidos
-    .filter(p => p.estado === 'finalizado' || p.estado === 'en_vivo') // Solo en vivo o finalizados
-    .forEach(p => {
-      const local = p.equipos_local?.nombre || "Equipo Local";
-      const visitante = p.equipos_visitante?.nombre || "Equipo Visitante";
+    tablaMasculino.innerHTML = "";
+    tablaFemenino.innerHTML = "";
 
-      if (!posiciones[local]) posiciones[local] = { equipo: local, pj: 0, pg: 0, pe: 0, pp: 0, gf: 0, gc: 0, pts: 0 };
-      if (!posiciones[visitante]) posiciones[visitante] = { equipo: visitante, pj: 0, pg: 0, pe: 0, pp: 0, gf: 0, gc: 0, pts: 0 };
+    let contMas = 1;
+    let contFem = 1;
 
-      posiciones[local].pj++;
-      posiciones[visitante].pj++;
+    for (const p of data) {
+      let logo = p.equipo.logo_url || 'img/logo.png';
 
-      posiciones[local].gf += p.marcador_local || 0;
-      posiciones[visitante].gf += p.marcador_visitante || 0;
-
-      posiciones[local].gc += p.marcador_visitante || 0;
-      posiciones[visitante].gc += p.marcador_local || 0;
-
-      if (p.marcador_local > p.marcador_visitante) {
-        posiciones[local].pg++;
-        posiciones[local].pts += 3;
-        posiciones[visitante].pp++;
-      } else if (p.marcador_local < p.marcador_visitante) {
-        posiciones[visitante].pg++;
-        posiciones[visitante].pts += 3;
-        posiciones[local].pp++;
-      } else if (p.marcador_local !== null && p.marcador_visitante !== null) {
-        posiciones[local].pe++;
-        posiciones[visitante].pe++;
-        posiciones[local].pts++;
-        posiciones[visitante].pts++;
+      // Si el logo está en Storage, obtener URL pública
+      if (logo.startsWith("public/") || logo.startsWith("imagenLogo/")) {
+        const { data: publicUrlData } = supabase.storage
+          .from("imagenLogo")
+          .getPublicUrl(logo);
+        logo = publicUrlData.publicUrl;
       }
-    });
 
-  const tablaOrdenada = Object.values(posiciones)
-    .map(e => ({ ...e, dg: e.gf - e.gc }))
-    .sort((a, b) => b.pts - a.pts || b.dg - a.dg || b.gf - a.gf);
+      const fila = document.createElement("tr");
+      fila.innerHTML = `
+        <td>${p.genero === 'masculino' ? contMas : contFem}</td>
+        <td>
+          <img src="${logo}" alt="${p.equipo.nombre}" class="logo-tabla">
+          <span>${p.equipo.nombre}</span>
+        </td>
+        <td>${p.PJ}</td>
+        <td>${p.PG}</td>
+        <td>${p.PE}</td>
+        <td>${p.PP}</td>
+        <td>${p.GF}</td>
+        <td>${p.GC}</td>
+        <td>${p.DG}</td>
+        <td>${p.PTS}</td>
+      `;
 
-  const tbody = document.querySelector("#tablaPosiciones tbody");
-  tbody.innerHTML = "";
+      if (p.genero === 'masculino') {
+        tablaMasculino.appendChild(fila);
+        contMas++;
+      } else {
+        tablaFemenino.appendChild(fila);
+        contFem++;
+      }
+    }
 
-  tablaOrdenada.forEach((e, i) => {
-    const fila = document.createElement("tr");
-    fila.innerHTML = `
-      <td>${i + 1}</td>
-      <td>${e.equipo}</td>
-      <td>${e.pj}</td>
-      <td>${e.pg}</td>
-      <td>${e.pe}</td>
-      <td>${e.pp}</td>
-      <td>${e.gf}</td>
-      <td>${e.gc}</td>
-      <td>${e.dg}</td>
-      <td><strong>${e.pts}</strong></td>
-    `;
-    tbody.appendChild(fila);
-  });
+  } catch (err) {
+    console.error("Error cargando posiciones:", err);
+  }
 }
 
-cargarTablaPosiciones();
+cargarPosiciones();

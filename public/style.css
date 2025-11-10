@@ -89,7 +89,7 @@ nav a:hover, nav a.activo {
 main.contenedor {
   padding: 70px;
   width: 100%;
-  max-width: 1500px;
+  max-width: 1800px;
   margin: 2rem 15px;
   flex-grow: 1;
   
@@ -314,7 +314,7 @@ footer {
 .estado-partido.finalizado { background-color: #388e3c; }
 .estado-partido.pendiente { background-color: #fbc02d; color: #333; }
 
-@media (max-width: 768px) {
+@media (max-width: 100%) {
   .lista-partidos { grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; }
   .partido-card { padding: 0.6rem; }
   .equipo img { width: 30px; height: 30px; }
@@ -325,7 +325,7 @@ footer {
 #noticias-seccion .contenedor-noticias {
   column-count: 2;
   column-gap: 20px;
-  max-width: 1200px;
+  max-width: 1800px;
   margin: 0 auto;
   padding: 0 10px;
 }
@@ -514,7 +514,7 @@ footer {
 #noticias-seccion-3 {
   column-count: 3;        /* Siempre 3 columnas en desktop */
   column-gap: 20px;       /* Espacio entre columnas */
-  max-width: 1200px;
+  max-width: 1800px;
   margin: 0 auto;
   padding: 0 10px;
 }
@@ -522,7 +522,7 @@ footer {
 #noticias-seccion-3 .card-noticia {
   display: inline-block;  /* Necesario para masonry */
   width: 100%;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
   background: var(--blanco);
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
@@ -1121,4 +1121,509 @@ header nav a.activo {
     from { opacity: 0; transform: translateY(-10px); }
     to { opacity: 1; transform: translateY(0); }
   }
+}
+ #marcadorCronometro {
+  display: flex;
+  justify-content: space-between; /* marcador a un lado, cronómetro al otro */
+  align-items: center;
+  background: #ffffff;
+  padding: 12px 25px;
+  border-radius: 12px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.12);
+  margin-bottom: 22px;
+  font-family: "Segoe UI", sans-serif;
+  transition: all 0.3s ease;
+}
+
+/* ==== MARCADOR ==== */
+.marcador-equipo {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  font-size: 1.9rem;
+  font-weight: 700;
+  color: #004d40;
+}
+
+.marcador-equipo #resMarcador {
+  font-size: 2.4rem;
+  font-weight: 800;
+  color: #c9a227; /* dorado elegante */
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* ==== CRONÓMETRO ==== */
+.cronometro-display {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #1b1b1b;
+}
+
+#cronometro {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #007a33; /* verde principal */
+  min-width: 70px;
+  text-align: center;
+}
+
+/* ==== BOTONES ==== */
+.botones-cronometro button {
+  margin-left: 10px;
+  padding: 7px 16px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+#btnStart {
+  background: #007a33;
+  color: #fff;
+}
+
+#btnPause {
+  background: #ff9800;
+  color: #fff;
+}
+
+#btnFinish {
+  background: #b71c1c;
+  color: #fff;
+}
+
+.botones-cronometro button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  opacity: 0.9;
+}
+
+/* ==== RESPONSIVO ==== */
+@media (max-width: 700px) {
+  #marcadorCronometro {
+    flex-direction: column;
+    gap: 10px;
+    text-align: center;
+  }
+  
+  .cronometro-display {
+    justify-content: center;
+  }
+}
+#marcadorCronometro {
+  display: flex;
+  justify-content: space-between; /* marcador a la izquierda, cronómetro a la derecha */
+  align-items: center;
+  background: #ffffff;
+  padding: 10px 25px;
+  border-radius: 10px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+  font-family: "Segoe UI", sans-serif;
+  font-size: 1.2rem;
+  color: #333;
+}
+
+/* Marcador */
+#marcadorCronometro #resMarcador {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #c9a227; /* dorado elegante */
+  margin-left: 10px;
+}
+
+/* Cronómetro */
+#marcadorCronometro #cronometro {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #007a33; /* verde principal */
+  margin-left: 10px;
+}
+
+/* Responsivo */
+@media (max-width: 600px) {
+  #marcadorCronometro {
+    flex-direction: column;
+    text-align: center;
+    gap: 5px;
+  }
+}
+
+
+.logo-equipo {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 8px;
+}
+
+.jugador-info {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.fila-historial {
+  background-color: #f9f9f9;
+  font-size: 0.9em;
+}
+
+.hidden {
+  display: none;
+}
+/* ======== GOLEADORES Y TARJETAS ======== */
+.logo-equipo {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  margin-right: 8px;
+  vertical-align: middle;
+}
+
+.jugador-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+}
+
+#contenedorGoleadores td,
+#contenedorTarjetas td {
+  padding: 10px;
+  vertical-align: middle;
+}
+
+.chk-historial {
+  transform: scale(1.2);
+  cursor: pointer;
+}
+
+/* ======== TARJETAS ======== */
+td.detalle-tarjetas {
+  display: flex;
+  justify-content: center;
+  gap: 4px;
+  font-size: 1.3rem;
+}
+
+.tarjeta {
+  display: inline-block;
+  width: 20px;
+  height: 28px;
+  border-radius: 3px;
+  margin: 0 2px;
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.4);
+}
+
+.tarjeta.amarilla {
+  background: #f8e71c;
+}
+.tarjeta.roja {
+  background: #d0021b;
+}
+.tarjeta.doble-amarilla {
+  background: linear-gradient(90deg, #f8e71c 50%, #d0021b 50%);
+}
+
+/* ======== HISTORIAL ======== */
+.fila-historial {
+  transition: all 0.3s ease;
+  background: #f9f9f9;
+}
+
+.fila-historial.hidden {
+  display: none;
+}
+
+.fila-historial td {
+  padding: 10px 20px;
+  font-size: 0.95rem;
+  color: #333;
+  border-top: 1px solid #ddd;
+}
+
+/* Animación al mostrar */
+.fila-historial:not(.hidden) {
+  animation: fadeIn 0.4s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+#contenedorGoleadores, #contenedorTarjetas {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+  gap: 20px;
+}
+
+.columna {
+  background: #fff;
+  border-radius: 12px;
+  padding: 10px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.jugador-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.logo-equipo {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+}
+
+.hidden {
+  display: none;
+}
+
+.historial {
+  font-size: 0.9em;
+  margin-top: 6px;
+  color: #444;
+}
+
+.tabla {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.tabla th, .tabla td {
+  padding: 6px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+/* Estilo general de la sección */
+#posiciones-seccion .card {
+  padding: 20px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+/* Contenedor de las dos columnas */
+.tablas-dobles {
+  display: flex;
+  gap: 20px;          /* Espacio entre columnas */
+  flex-wrap: wrap;     /* Que se acomoden en pantallas pequeñas */
+}
+
+/* Cada columna de tabla */
+.tabla-columna {
+  flex: 1 1 45%;       /* Ocupa 45% y puede reducirse en pantallas pequeñas */
+  min-width: 300px;    /* Evita que la columna sea demasiado pequeña */
+}
+
+/* Tablas */
+.tabla-columna table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.tabla-columna th, 
+.tabla-columna td {
+  border: 1px solid #ccc;
+  padding: 8px 12px;
+  text-align: center;
+}
+
+.tabla-columna th {
+  background-color: #f5f5f5;
+  font-weight: bold;
+  color: #333;
+}
+
+/* Encabezados de columna */
+.tabla-columna h3 {
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+/* Contenedor principal */
+.contenedor {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+/* Título general */
+.contenedor h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 28px;
+  color: #333;
+}
+
+/* Contenedor de las dos columnas */
+.tablas-dobles {
+  display: flex;
+  gap: 20px; /* espacio entre columnas */
+  flex-wrap: wrap; /* para que se ajusten en móviles */
+}
+
+/* Cada columna */
+.tabla-columna {
+  flex: 1;
+  min-width: 300px; /* mínimo ancho antes de apilar */
+}
+
+/* Subtítulos de cada tabla */
+.tabla-columna h3 {
+  text-align: center;
+  margin-bottom: 10px;
+  font-size: 22px;
+  color: #555;
+}
+
+/* Tablas */
+.tabla-posiciones {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 1px 5px rgba(0,0,0,0.1);
+  margin-bottom: 20px;
+}
+
+.tabla-posiciones th,
+.tabla-posiciones td {
+  padding: 8px;
+  text-align: center;
+  border-bottom: 1px solid #ddd;
+}
+
+.tabla-posiciones th {
+  background-color: #007a33;
+  color: #fff;
+  font-weight: bold;
+}
+
+.tabla-posiciones tr:nth-child(even) {
+  background-color: #f5f5f5;
+}
+
+/* Responsive: apilar en móvil */
+@media (max-width: 768px) {
+  .tablas-dobles {
+    flex-direction: column;
+  }
+}
+
+.tablas-dobles {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.tabla-columna {
+  flex: 1;
+  min-width: 300px; /* Para que no se achique demasiado en pantallas pequeñas */
+}
+
+.logo-tabla {
+  width: 30px;
+  height: 30px;
+  vertical-align: middle;
+  margin-right: 8px;
+}
+/* CSS básico para logos y tablas */
+.tabla-posiciones {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+.tabla-posiciones th,
+.tabla-posiciones td {
+  border: 1px solid #ccc;
+  padding: 5px 10px;
+  text-align: center;
+}
+.tabla-posiciones img.logo-tabla {
+  width: 30px;
+  height: 30px;
+  vertical-align: middle;
+  margin-right: 5px;
+}
+.oro { background-color: #ffd70033; }
+.plata { background-color: #c0c0ff33; }
+.bronce { background-color: #cd7f3233; }
+
+/* Alinear logo y nombre del equipo a la izquierda */
+.tabla-posiciones td:nth-child(2) {
+  display: flex;
+  align-items: center; /* Centrar verticalmente */
+  justify-content: flex-start; /* Alinear a la izquierda */
+  gap: 8px; /* Espacio entre logo y nombre */
+}
+
+.tabla-posiciones td img.logo-tabla {
+  width: 30px;
+  height: 30px;
+  object-fit: contain;
+}
+
+.equipo-con-logo {
+  display: flex;
+  align-items: center;         /* Centrar vertical */
+  justify-content: flex-start; /* Alinear a la izquierda */
+  gap: 8px;                    /* Espacio entre logo y nombre */
+}
+
+.logo-tabla {
+  width: 30px;
+  height: 30px;
+  object-fit: contain;
+}
+
+/* Estilo general de tablas de resumen */
+#resumenTablaMasculino,
+#resumenTablaFemenino {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #f5f5f5; /* color de fondo similar */
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+#resumenTablaMasculino th,
+#resumenTablaFemenino th {
+  background-color: #007a33; /* verde similar */
+  color: #fff;
+  text-align: left;
+  padding: 8px;
+}
+
+#resumenTablaMasculino td,
+#resumenTablaFemenino td {
+  padding: 8px;
+  border-bottom: 1px solid #ddd;
+  text-align: left;
+}
+
+#resumenTablaMasculino tr:nth-child(even),
+#resumenTablaFemenino tr:nth-child(even) {
+  background-color: #eaeaea; /* filas alternas */
+}
+
+/* Logo y nombre alineados a la izquierda */
+.equipo-cell {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.logo-tabla {
+  width: 30px;
+  height: 30px;
+  object-fit: contain;
 }
