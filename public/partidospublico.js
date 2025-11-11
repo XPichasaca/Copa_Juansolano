@@ -3,81 +3,35 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Tabla de Posiciones - Olimpiadas Juan Solano</title>
+  <title>Todos los Partidos - Olimpiadas Juan Solano</title>
   <link rel="stylesheet" href="style.css" />
 </head>
+
 <body class="fondo-gradiente">
   <header>
-    <img src="img/logo.png" alt="Logo" class="logo-header" />
-    <h1>Tabla de Posiciones</h1>
+    <div class="logo-titulo">
+      <img src="img/logo.png" alt="Logo" class="logo-header" />
+      <h1>Todos los Partidos</h1>
+    </div>
     <nav>
       <a href="index.html">Inicio</a>
       <a href="equipos.html">Equipos</a>
       <a href="partidos.html">Partidos</a>
-      <a href="tabla.html" class="activo">Tabla</a>
+      <a href="tabla.html">Tabla</a>
       <a href="jugadores.html">Jugadores</a>
       <a href="noticias.html">Noticias</a>
-      <a href="login.html" class="btn-login">Login</a>
     </nav>
   </header>
-  
 
- <main class="contenedor">
-  <h2>🏆 Tablas de Posiciones</h2>
-
-  <div class="tablas-dobles">
-    <!-- Masculino -->
-    <div class="tabla-columna">
-      <h3>🧔 Masculino</h3>
-      <table id="tablaPosicionesMasculino" class="tabla-posiciones">
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Equipo</th>
-            <th>PJ</th>
-            <th>PG</th>
-            <th>PE</th>
-            <th>PP</th>
-            <th>GF</th>
-            <th>GC</th>
-            <th>DG</th>
-            <th>PTS</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
-    </div>
-
-    <!-- Femenino -->
-    <div class="tabla-columna">
-      <h3>👩 Femenino</h3>
-      <table id="tablaPosicionesFemenino" class="tabla-posiciones">
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Equipo</th>
-            <th>PJ</th>
-            <th>PG</th>
-            <th>PE</th>
-            <th>PP</th>
-            <th>GF</th>
-            <th>GC</th>
-            <th>DG</th>
-            <th>PTS</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
-    </div>
-  </div>
-</main>
-
-
+  <main class="contenedor">
+    <h2>Todos los Partidos</h2>
+    <div id="listaPartidos" class="grid-partidos"></div>
+  </main>
 
   <footer>
     <p>Comuna Quilloac | Desarrollado por <strong>Xavier Pichasaca</strong> © 2025</p>
   </footer>
 
-  <script type="module" src="partidosRealTime.js"></script>
+  <script type="module" src="partidospublico.js"></script>
 </body>
 </html>
