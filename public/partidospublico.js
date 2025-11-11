@@ -1,37 +1,125 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Todos los Partidos - Olimpiadas Juan Solano</title>
-  <link rel="stylesheet" href="style.css" />
-</head>
+// ==============================
+// 📦 Conexión pública a Supabase
+// ==============================
+import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
 
-<body class="fondo-gradiente">
-  <header>
-    <div class="logo-titulo">
-      <img src="img/logo.png" alt="Logo" class="logo-header" />
-      <h1>Todos los Partidos</h1>
-    </div>
-    <nav>
-      <a href="index.html">Inicio</a>
-      <a href="equipos.html">Equipos</a>
-      <a href="partidos.html">Partidos</a>
-      <a href="tabla.html">Tabla</a>
-      <a href="jugadores.html">Jugadores</a>
-      <a href="noticias.html">Noticias</a>
-    </nav>
-  </header>
+// ⚙️ Configuración de tu proyecto Supabase
+const SUPABASE_URL = "https://ghstgwywcaxtfdyyjxli.supabase.co";
+const SUPABASE_KEY = "sb_publishable_bm3rEZ92WLzBkxqpvWCu0w_oG4Cr9YZ"; // Clave pública (anon)
+export const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-  <main class="contenedor">
-    <h2>Todos los Partidos</h2>
-    <div id="listaPartidos" class="grid-partidos"></div>
-  </main>
+// ==============================
+// ⚽ CARGAR PARTIDOS (público)
+// ==============================
+async function cargarPartidosPublico() {
+  try {
+    const { data: partidos, error } = await supabase
+      .from("partidos")
+      .select(`
+        id, fecha, estado, categoria,
+        marcador_local, marcador_visitante,
+        equipos_local:equipo_local_id(nombre, logo_url),
+        equipos_visitante:equipo_visitante_id(nombre, logo_url)
+      `)
+      .order("fecha", { ascending: true });
 
-  <footer>
-    <p>Comuna Quilloac | Desarrollado por <strong>Xavier Pichasaca</strong> © 2025</p>
-  </footer>
+    if (error) throw error;
 
-  <script type="module" src="partidospublico.js"></script>
-</body>
-</html>
+    const contenedor = document.getElementById("listaPartidos");
+    contenedor.innerHTML = "";
+
+    if (!partidos?.length) {
+      contenedor.innerHTML = "<p>No hay partidos registrados.</p>";
+      return;
+    }
+
+    // 🗓️ Agrupar por fecha
+    const grupos = {};
+    partidos.forEach(p => {
+      const fechaObj = new Date(p.fecha);
+      const dia = fechaObj.toLocaleDateString("es-EC", {
+        weekday: "long",
+        day: "numeric",
+        month: "long"
+      });
+      if (!grupos[dia]) grupos[dia] = [];
+      grupos[dia].push(p);
+    });
+
+    // 🎨 Renderizar los grupos
+    for (const [dia, lista] of Object.entries(grupos)) {
+      const bloque = document.createElement("div");
+      bloque.classList.add("dia-bloque");
+      bloque.innerHTML = `<div class="dia-header">${dia.toUpperCase()}</div>`;
+
+      const listaDiv = document.createElement("div");
+      listaDiv.classList.add("lista-partidos");
+
+      lista.forEach(p => {
+        const hora = new Date(p.fecha).toLocaleTimeString("es-EC", {
+          hour: "2-digit",
+          minute: "2-digit",
+          hour12: false
+        });
+
+        const estado = p.estado || "pendiente";
+
+        const partido = document.createElement("div");
+        partido.classList.add("partido-card", estado);
+
+        partido.innerHTML = `
+          <div class="hora-categoria">
+            <span class="hora">${hora}</span>
+            <span class="categoria">${p.categoria || ""}</span>
+          </div>
+
+          <div class="partido-detalle">
+            <div class="equipo equipo-local">
+              <img src="${p.equipos_local?.logo_url || 'img/logo.png'}" alt="Local">
+              <span>${p.equipos_local?.nombre || "Local"}</span>
+            </div>
+
+            <div class="marcador">
+              <span class="marcador-local">${p.marcador_local ?? 0}</span>
+              <span class="guion">-</span>
+              <span class="marcador-visitante">${p.marcador_visitante ?? 0}</span>
+            </div>
+
+            <div class="equipo equipo-visitante">
+              <img src="${p.equipos_visitante?.logo_url || 'img/logo.png'}" alt="Visitante">
+              <span>${p.equipos_visitante?.nombre || "Visitante"}</span>
+            </div>
+          </div>
+
+          <div class="estado-partido ${estado}">
+            ${estado.replace("_", " ").toUpperCase()}
+          </div>
+        `;
+
+        listaDiv.appendChild(partido);
+      });
+
+      bloque.appendChild(listaDiv);
+      contenedor.appendChild(bloque);
+    }
+
+  } catch (err) {
+    console.error("❌ Error al cargar partidos:", err);
+    document.getElementById("listaPartidos").innerHTML =
+      `<p class="error">Error al cargar datos. Revisa la conexión.</p>`;
+  }
+}
+
+// ==============================
+// 🔄 Actualización en tiempo real
+// ==============================
+supabase
+  .channel("realtime-partidos-publico")
+  .on("postgres_changes", { event: "*", schema: "public", table: "partidos" }, cargarPartidosPublico)
+  .on("postgres_changes", { event: "*", schema: "public", table: "estadisticas" }, cargarPartidosPublico)
+  .subscribe();
+
+// ==============================
+// 🚀 Inicio
+// ==============================
+cargarPartidosPublico();
