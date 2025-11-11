@@ -1,6 +1,15 @@
-import { supabase } from "./script.js"; // conexión Supabase
+// ==========================
+// 🔗 Conexión a Supabase (sin login)
+// ==========================
+import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
 
+const SUPABASE_URL = "https://ghstgwywcaxtfdyyjxli.supabase.co";
+const SUPABASE_KEY = "sb_publishable_bm3rEZ92WLzBkxqpvWCu0w_oG4Cr9YZ"; // Public Anon Key
+const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+// ==========================
 // Referencias HTML
+// ==========================
 const contenedorGoleadores = document.querySelector("#contenedorGoleadores");
 const contenedorTarjetas = document.querySelector("#contenedorTarjetas");
 
@@ -148,7 +157,7 @@ function renderTarjetas(masculino, femenino) {
       <table class="tabla">
         <thead><tr><th>Jugador</th><th>Equipo</th><th>Detalles</th><th>Total</th></tr></thead>
         <tbody>${crearFilasTarjetas(femenino)}</tbody>
-      </table>
+      </div>
     </div>
   `;
 }

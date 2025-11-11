@@ -1,13 +1,13 @@
 import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
 
-// 🔗 Conexión a Supabase
+// Supabase pública
 const SUPABASE_URL = "https://ghstgwywcaxtfdyyjxli.supabase.co";
-const SUPABASE_KEY = "sb_publishable_bm3rEZ92WLzBkxqpvWCu0w_oG4Cr9YZ";
+const SUPABASE_KEY = "sb_publishable_bm3rEZ92WLzBkxqpvWCu0w_oG4Cr9YZ"; // Public Key
 const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-// ⚙️ Función para cargar tabla resumen por categoría con logo
 async function cargarResumenTabla(categoria, idTabla) {
   try {
+    // Obtener partidos
     const { data: partidos, error } = await supabase
       .from("partidos")
       .select(`
@@ -30,7 +30,6 @@ async function cargarResumenTabla(categoria, idTabla) {
       const local = p.equipo_local?.nombre || "Local";
       const visitante = p.equipo_visitante?.nombre || "Visitante";
 
-      // Inicializar
       if (!posiciones[local]) posiciones[local] = { equipo: p.equipo_local, pj: 0, pts: 0, gf: 0, gc: 0 };
       if (!posiciones[visitante]) posiciones[visitante] = { equipo: p.equipo_visitante, pj: 0, pts: 0, gf: 0, gc: 0 };
 
@@ -56,7 +55,7 @@ async function cargarResumenTabla(categoria, idTabla) {
       .sort((a, b) => b.pts - a.pts || b.dg - a.dg);
 
     const tbody = document.querySelector(`#${idTabla} tbody`);
-    tbody.innerHTML = ""; // Vaciar antes de agregar filas
+    tbody.innerHTML = "";
 
     if (tablaOrdenada.length === 0) {
       tbody.innerHTML = `<tr><td colspan="5">No hay datos disponibles.</td></tr>`;
@@ -64,15 +63,7 @@ async function cargarResumenTabla(categoria, idTabla) {
     }
 
     tablaOrdenada.forEach((e, i) => {
-      // Obtener logo si existe
-      let logo = e.equipo?.logo_url || 'img/logo.png';
-
-      // Si el logo está en Storage
-      if (logo.startsWith("imagenLogo/") || logo.startsWith("public/")) {
-        const { data: publicUrlData } = supabase.storage.from("imagenLogo").getPublicUrl(logo);
-        logo = publicUrlData.publicUrl;
-      }
-
+      const logo = e.equipo?.logo_url || 'img/logo.png';
       const fila = document.createElement("tr");
       fila.innerHTML = `
         <td>${i + 1}</td>
@@ -92,11 +83,11 @@ async function cargarResumenTabla(categoria, idTabla) {
   }
 }
 
-// 🚀 Cargar ambas tablas al inicio
+// 🚀 Cargar tablas al inicio
 cargarResumenTabla("masculino", "resumenTablaMasculino");
 cargarResumenTabla("femenino", "resumenTablaFemenino");
 
-// 🔁 Actualizar automáticamente cada 30 segundos
+// 🔁 Actualizar cada 30 segundos
 setInterval(() => {
   cargarResumenTabla("masculino", "resumenTablaMasculino");
   cargarResumenTabla("femenino", "resumenTablaFemenino");
