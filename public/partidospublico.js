@@ -1,99 +1,125 @@
-import { supabase } from "./script.js";
+// ==============================
+// 📦 Conexión pública a Supabase
+// ==============================
+import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
 
+// ⚙️ Configuración de tu proyecto Supabase
+const SUPABASE_URL = "https://ghstgwywcaxtfdyyjxli.supabase.co";
+const SUPABASE_KEY = "sb_publishable_bm3rEZ92WLzBkxqpvWCu0w_oG4Cr9YZ"; // Clave pública (anon)
+export const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+// ==============================
+// ⚽ CARGAR PARTIDOS (público)
+// ==============================
 async function cargarPartidosPublico() {
-  const { data: partidos, error } = await supabase
-    .from("partidos")
-    .select(`
-      id, fecha, estado, categoria,
-      marcador_local, marcador_visitante,
-      equipos_local:equipo_local_id(nombre, logo_url),
-      equipos_visitante:equipo_visitante_id(nombre, logo_url)
-    `)
-    .order("fecha", { ascending: true });
+  try {
+    const { data: partidos, error } = await supabase
+      .from("partidos")
+      .select(`
+        id, fecha, estado, categoria,
+        marcador_local, marcador_visitante,
+        equipos_local:equipo_local_id(nombre, logo_url),
+        equipos_visitante:equipo_visitante_id(nombre, logo_url)
+      `)
+      .order("fecha", { ascending: true });
 
-  if (error) return console.error("Error al cargar partidos:", error);
+    if (error) throw error;
 
-  const contenedor = document.getElementById("listaPartidos");
-  contenedor.innerHTML = "";
+    const contenedor = document.getElementById("listaPartidos");
+    contenedor.innerHTML = "";
 
-  if (!partidos?.length) {
-    contenedor.innerHTML = "<p>No hay partidos registrados.</p>";
-    return;
-  }
+    if (!partidos?.length) {
+      contenedor.innerHTML = "<p>No hay partidos registrados.</p>";
+      return;
+    }
 
-  // Agrupar partidos por día
-  const grupos = {};
-  partidos.forEach(p => {
-    const dia = new Date(p.fecha).toLocaleDateString("es-EC", {
-      weekday: "long",
-      day: "numeric",
-      month: "long"
+    // 🗓️ Agrupar por fecha
+    const grupos = {};
+    partidos.forEach(p => {
+      const fechaObj = new Date(p.fecha);
+      const dia = fechaObj.toLocaleDateString("es-EC", {
+        weekday: "long",
+        day: "numeric",
+        month: "long"
+      });
+      if (!grupos[dia]) grupos[dia] = [];
+      grupos[dia].push(p);
     });
-    if (!grupos[dia]) grupos[dia] = [];
-    grupos[dia].push(p);
-  });
 
-  // Mostrar partidos por grupo de día
-  for (const [dia, lista] of Object.entries(grupos)) {
-    const bloque = document.createElement("div");
-    bloque.classList.add("dia-bloque");
-    bloque.innerHTML = `<div class="dia-header">${dia.toUpperCase()}</div>`;
+    // 🎨 Renderizar los grupos
+    for (const [dia, lista] of Object.entries(grupos)) {
+      const bloque = document.createElement("div");
+      bloque.classList.add("dia-bloque");
+      bloque.innerHTML = `<div class="dia-header">${dia.toUpperCase()}</div>`;
 
-    const listaDiv = document.createElement("div");
-    listaDiv.classList.add("lista-partidos");
+      const listaDiv = document.createElement("div");
+      listaDiv.classList.add("lista-partidos");
 
-    lista.forEach(p => {
-      const hora = new Date(p.fecha).toLocaleTimeString("es-EC", {
-        hour: "2-digit",
-        minute: "2-digit",
-        hour12: false
+      lista.forEach(p => {
+        const hora = new Date(p.fecha).toLocaleTimeString("es-EC", {
+          hour: "2-digit",
+          minute: "2-digit",
+          hour12: false
+        });
+
+        const estado = p.estado || "pendiente";
+
+        const partido = document.createElement("div");
+        partido.classList.add("partido-card", estado);
+
+        partido.innerHTML = `
+          <div class="hora-categoria">
+            <span class="hora">${hora}</span>
+            <span class="categoria">${p.categoria || ""}</span>
+          </div>
+
+          <div class="partido-detalle">
+            <div class="equipo equipo-local">
+              <img src="${p.equipos_local?.logo_url || 'img/logo.png'}" alt="Local">
+              <span>${p.equipos_local?.nombre || "Local"}</span>
+            </div>
+
+            <div class="marcador">
+              <span class="marcador-local">${p.marcador_local ?? 0}</span>
+              <span class="guion">-</span>
+              <span class="marcador-visitante">${p.marcador_visitante ?? 0}</span>
+            </div>
+
+            <div class="equipo equipo-visitante">
+              <img src="${p.equipos_visitante?.logo_url || 'img/logo.png'}" alt="Visitante">
+              <span>${p.equipos_visitante?.nombre || "Visitante"}</span>
+            </div>
+          </div>
+
+          <div class="estado-partido ${estado}">
+            ${estado.replace("_", " ").toUpperCase()}
+          </div>
+        `;
+
+        listaDiv.appendChild(partido);
       });
 
-      const estado = p.estado || "pendiente";
+      bloque.appendChild(listaDiv);
+      contenedor.appendChild(bloque);
+    }
 
-      const partido = document.createElement("div");
-      partido.classList.add("partido-card", estado);
-
-      partido.innerHTML = `
-        <div class="hora-categoria">
-          <span class="hora">${hora}</span>
-          <span class="categoria">${p.categoria}</span>
-        </div>
-
-        <div class="partido-detalle">
-          <div class="equipo equipo-local">
-            <img src="${p.equipos_local?.logo_url || 'img/logo.png'}" alt="Local">
-            <span>${p.equipos_local?.nombre || "Local"}</span>
-          </div>
-
-          <div class="marcador">
-            <span class="marcador-local">${p.marcador_local ?? 0}</span>
-            <span class="guion">-</span>
-            <span class="marcador-visitante">${p.marcador_visitante ?? 0}</span>
-          </div>
-
-          <div class="equipo equipo-visitante">
-            <img src="${p.equipos_visitante?.logo_url || 'img/logo.png'}" alt="Visitante">
-            <span>${p.equipos_visitante?.nombre || "Visitante"}</span>
-          </div>
-        </div>
-
-        <div class="estado-partido ${estado}">${estado.replace('_',' ').toUpperCase()}</div>
-      `;
-
-      listaDiv.appendChild(partido);
-    });
-
-    bloque.appendChild(listaDiv);
-    contenedor.appendChild(bloque);
+  } catch (err) {
+    console.error("❌ Error al cargar partidos:", err);
+    document.getElementById("listaPartidos").innerHTML =
+      `<p class="error">Error al cargar datos. Revisa la conexión.</p>`;
   }
 }
 
-// Realtime updates
+// ==============================
+// 🔄 Actualización en tiempo real
+// ==============================
 supabase
   .channel("realtime-partidos-publico")
   .on("postgres_changes", { event: "*", schema: "public", table: "partidos" }, cargarPartidosPublico)
   .on("postgres_changes", { event: "*", schema: "public", table: "estadisticas" }, cargarPartidosPublico)
   .subscribe();
 
+// ==============================
+// 🚀 Inicio
+// ==============================
 cargarPartidosPublico();
