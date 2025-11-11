@@ -5,7 +5,6 @@ import { fileURLToPath } from "url";
 import { createClient } from "@supabase/supabase-js";
 
 const app = express();
-const PORT = 3000;
 
 // ==========================
 // 🗂️ Configuración de rutas absolutas
@@ -34,7 +33,6 @@ app.post("/usuarios", async (req, res) => {
   try {
     console.log("🟢 Datos recibidos:", req.body);
 
-    // 1️⃣ Crear usuario en Auth
     const { data, error: errorAuth } = await supabase.auth.admin.createUser({
       email,
       password,
@@ -45,10 +43,9 @@ app.post("/usuarios", async (req, res) => {
     const userId = data.user.id;
     if (!userId) throw new Error("No se obtuvo el ID del usuario creado.");
 
-    // 2️⃣ Insertar en perfiles con rol
     const { error: errorPerfil } = await supabase
       .from("perfiles")
-      .insert([{ id: userId, email, role: role.toLowerCase() }]); // rol en minúscula
+      .insert([{ id: userId, email, role: role.toLowerCase() }]);
     if (errorPerfil) throw errorPerfil;
 
     res.json({ ok: true, user: data.user });
@@ -75,14 +72,9 @@ app.get("/usuarios", async (req, res) => {
 // ==========================
 // 🏠 Ruta principal pública
 // ==========================
-// Esto asegura que index.html se cargue directamente
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
-// ==========================
-// 🖥️ Levantar servidor
-// ==========================
-app.listen(PORT, () =>
-  console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`)
-);
+// ✅ Exporta el servidor (importante para Vercel)
+export default app;
