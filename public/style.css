@@ -1725,3 +1725,49 @@ td.detalle-tarjetas {
     grid-template-columns: 1fr !important;
   }
 }
+
+
+/* ===== DESKTOP (normal) ===== */
+.contenedor {
+  width: 90%;
+  margin: 20px auto;
+}
+
+/* Estructura doble (masculino / femenino) */
+.tablas-dobles {
+  display: flex;
+  gap: 20px;
+}
+
+/* ===== MOBILE ===== */
+@media (max-width: 768px) {
+  .contenedor {
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 5px !important;   // mínimo padding para que no pegue al borde
+  }
+
+  .tablas-dobles {
+    flex-direction: column;  // pasa una tabla debajo de la otra
+    gap: 10px;
+  }
+
+  .tabla-columna {
+    width: 100% !important;
+  }
+
+  .tabla-posiciones {
+    width: 100%;
+    font-size: 12px; // ajusta para que no se corte en pantallas pequeñas
+  }
+
+  .tabla-posiciones th,
+  .tabla-posiciones td {
+    padding: 4px;
+  }
+
+  h2, h3 {
+    text-align: center;
+    margin: 5px 0;
+  }
+}
