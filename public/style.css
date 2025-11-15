@@ -1697,52 +1697,31 @@ td.detalle-tarjetas {
   }
 }
 
-/* ============================
-   📱 MÓVIL - SIN MÁRGENES
-============================ */
-.contenedor {
-  width: 100%;
-  max-width: 100%;
-  margin: 0;        // sin margen externo
-  padding: 0 4px;   // mínimo padding lateral (puedes poner 0)
-}
 
-/* Título */
-.contenedor h2 {
-  margin: 0px 0;    // mínimo margen
-  font-size: 1.1rem;
-  text-align: center;
-}
-
-/* Grid de partidos */
-.grid-partidos {
-  display: grid;
-  gap: 6px;
-  grid-template-columns: 1fr;
-  padding: 0;      // sin margen
-}
-
-/* Tarjeta partido (por si usas .partido-card) */
-.partido-card {
-  padding: 8px;
-  border-radius: 10px;
-  background: #f5f5f5;
-  width: 100%;
-  margin: 0;       // sin margen entre tarjetas
-}
-
-/* ============================
-   🖥️ Tablets / Desktop
-============================ */
-@media (min-width: 768px) {
-  .contenedor {
-    max-width: 900px;
-    margin: 0 auto;       // centrado en pantallas grandes
-    padding: 0 12px;
+/* =============================
+   📱 MÓVIL - ANCHO COMPLETO
+============================= */
+@media (max-width: 768px) {
+  .contenedor,
+  main.contenedor,
+  .card,
+  .noticia-card,
+  .tarjeta,
+  .partido-card,
+  .noticias,
+  .contenido,
+  .section-box {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding-left: 6px;
+    padding-right: 6px;
   }
 
-  .grid-partidos {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
+  /* Si tu contenedor usa grid o flex */
+  .grid,
+  .grid-partidos,
+  .grid-noticias {
+    grid-template-columns: 1fr !important;
   }
 }
