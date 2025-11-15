@@ -1631,86 +1631,118 @@ td.detalle-tarjetas {
 
 
 
-
-/* === Estilos para pantallas pequeñas === */
+/* ============================
+   📱 VERSIÓN MÓVIL
+============================ */
 @media (max-width: 768px) {
   body {
+    padding: 0; /* 🔥 elimina márgenes laterales */
+    margin: 0;
+    width: 100%;
+    overflow-x: hidden;
+  }
+
+  main, section, .contenedor, .dia-bloque {
+    width: 100%;
+    max-width: 100%;
     margin: 0;
     padding: 0;
-    width: 100%;
-    font-size: 16px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  header, main, footer, section, .container, .dia-bloque, .columna {
-    width: 100% !important;
-    max-width: 100% !important;
-    padding: 10px;
-    box-sizing: border-box;
-  }
-
-  .lista-partidos,
-  .tabla {
-    width: 100%;
-    display: block;
-    overflow-x: auto;
+    border-radius: 0;
   }
 
   .partido-card {
-    width: 100%;
-    margin: 10px 0;
-    padding: 12px;
-    display: flex;
     flex-direction: column;
     align-items: center;
-    text-align: center;
+    width: 100%;
   }
 
-  .equipo {
-    display: flex;
+  .partido-detalle {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .hora-categoria {
+    flex-direction: column;
     align-items: center;
-    justify-content: center;
-    gap: 8px;
-  }
-
-  .equipo img {
-    width: 40px;
-    height: 40px;
-    object-fit: contain;
+    gap: 4px;
   }
 
   .marcador {
-    font-size: 1.4em;
-    margin: 5px 0;
+    font-size: 1.6rem;
   }
 
-  h1, h2, h3 {
-    text-align: center;
-    font-size: 1.2em;
-  }
-
-  table {
-    font-size: 0.9em;
-  }
-
-  td, th {
-    text-align: center;
+  .tabla th, .tabla td {
+    font-size: 0.85rem;
     padding: 6px;
   }
 
-  .jugador-info {
-    justify-content: center;
+  h1, h2, h3 {
+    font-size: 1.1rem;
+    text-align: center;
+  }
+
+  .columna {
+    width: 100%;
+    padding: 0;
+  }
+
+  .jugador-info img {
+    width: 28px;
+    height: 28px;
   }
 
   .logo-equipo {
     width: 30px;
     height: 30px;
   }
+}
 
-  .estado-partido {
-    font-size: 0.8em;
-    padding: 4px 6px;
+/* ============================
+   📱 MÓVIL - SIN MÁRGENES
+============================ */
+.contenedor {
+  width: 100%;
+  max-width: 100%;
+  margin: 0;        // sin margen externo
+  padding: 0 4px;   // mínimo padding lateral (puedes poner 0)
+}
+
+/* Título */
+.contenedor h2 {
+  margin: 0px 0;    // mínimo margen
+  font-size: 1.1rem;
+  text-align: center;
+}
+
+/* Grid de partidos */
+.grid-partidos {
+  display: grid;
+  gap: 6px;
+  grid-template-columns: 1fr;
+  padding: 0;      // sin margen
+}
+
+/* Tarjeta partido (por si usas .partido-card) */
+.partido-card {
+  padding: 8px;
+  border-radius: 10px;
+  background: #f5f5f5;
+  width: 100%;
+  margin: 0;       // sin margen entre tarjetas
+}
+
+/* ============================
+   🖥️ Tablets / Desktop
+============================ */
+@media (min-width: 768px) {
+  .contenedor {
+    max-width: 900px;
+    margin: 0 auto;       // centrado en pantallas grandes
+    padding: 0 12px;
+  }
+
+  .grid-partidos {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
   }
 }
