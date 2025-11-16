@@ -6,19 +6,15 @@ document.getElementById("loginForm").addEventListener("submit", async (e) => {
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
 
-  // Intentar login
   const { data, error } = await supabase.auth.signInWithPassword({ email, password });
 
   if (error) {
-    // Mensaje personalizado para error de login
     alert("Usuario o contraseña incorrectos. Por favor, ingresa con un usuario Administrador o Delegado de mesa.");
     return;
   }
 
-  // Obtener userId
   const userId = data.user.id;
 
-  // Consultar rol desde tabla perfiles
   const { data: perfilData, error: perfilError } = await supabase
     .from("perfiles")
     .select("role")
@@ -30,11 +26,13 @@ document.getElementById("loginForm").addEventListener("submit", async (e) => {
     return;
   }
 
-  // Mostrar mensaje de bienvenida
-  document.getElementById("mensajeBienvenida").classList.remove("hidden");
+  // Guardar rol
+  localStorage.setItem("rol", perfilData.role);
+
+  // Mensaje de bienvenida
+  document.getElementById("mensajeBienvenida").style.display = "block";
   document.getElementById("bienvenidaTexto").innerText = `¡Bienvenido, ${email}!`;
 
-  // Redirigir según rol
   setTimeout(() => {
     if (perfilData.role === "admin") {
       window.location.href = "registro.html";

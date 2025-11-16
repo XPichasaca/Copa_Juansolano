@@ -3,35 +3,86 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Login - Olimpiadas Juan Solano</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body class="fondo-gradiente">
-  <header>
-    <img src="img/logo.png" alt="Logo" class="logo-header" />
-    <h1>Panel Administrativo</h1>
-  </header>
+  <title>Iniciar Sesión</title>
 
-  <main class="centrado">
-    <div class="card-login">
-      <h2>Iniciar Sesión</h2>
-      <form id="loginForm">
-        <input type="email" id="email" placeholder="Correo electrónico" required />
-        <input type="password" id="password" placeholder="Contraseña" required />
-        <button type="submit" class="btn-dorado">Ingresar</button>
-      </form>
-      <p class="mensaje-login">¿No tienes cuenta? <a href="reg.html" id="registrarBtn">Registrarme</a></p>
-    </div>
-    <!-- Aquí aparece el mensaje de bienvenida después de login -->
-    <div id="mensajeBienvenida" class="hidden">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background: #f2f2f2;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .login-box {
+      width: 90%;
+      max-width: 400px;
+      background: white;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+      text-align: center;
+    }
+
+    h2 {
+      color: #007a33;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background: #007a33;
+      color: white;
+      font-size: 18px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    button:hover {
+      background: #005e27;
+    }
+
+    #mensajeBienvenida {
+      margin-top: 15px;
+      padding: 10px;
+      background: #d4ffd4;
+      border-radius: 8px;
+      display: none;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="login-box">
+    <h2>Iniciar Sesión</h2>
+
+    <form id="loginForm">
+      <input type="email" id="email" placeholder="Correo" required />
+      <input type="password" id="password" placeholder="Contraseña" required />
+      <button type="submit">Ingresar</button>
+    </form>
+
+    <div id="mensajeBienvenida">
       <p id="bienvenidaTexto"></p>
     </div>
-  </main>
-
-  <footer>
-    <p>Comuna Quilloac | Desarrollado por <strong>Xavier Pichasaca</strong> © 2025</p>
-  </footer>
+  </div>
 
   <script type="module" src="login.js"></script>
+
 </body>
 </html>

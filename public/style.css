@@ -1771,3 +1771,71 @@ td.detalle-tarjetas {
     margin: 5px 0;
   }
 }
+
+.submenu-login {
+  position: absolute;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  margin-top: 5px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  width: 150px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.submenu-login a {
+  padding: 8px 10px;
+  color: #007a33;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.submenu-login a:hover {
+  background: #f0f0f0;
+}
+
+.oculto {
+  display: none;
+}
+nav {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.login-wrapper {
+  position: relative;
+}
+
+.submenu {
+  position: absolute;
+  top: 100%;   /* Justo debajo del botón */
+  right: 0;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 10px 0;
+  display: flex;
+  flex-direction: column;
+  min-width: 150px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  z-index: 999;
+}
+
+.submenu a {
+  padding: 10px 15px;
+  color: #007a33;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.submenu a:hover {
+  background: #f0f0f0;
+}
+
+.oculto {
+  display: none;
+}

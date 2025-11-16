@@ -137,6 +137,30 @@
 }
 
   </style>
+  <script>
+document.addEventListener("DOMContentLoaded", () => {
+
+  const btnLogin = document.querySelector(".btn-login");
+  const submenu = document.getElementById("submenuLogin");
+
+  if (!btnLogin || !submenu) return;
+
+  // abrir/cerrar submenu
+  window.mostrarSubmenu = function(event) {
+    event.preventDefault();
+    submenu.classList.toggle("oculto");
+  };
+
+  // cerrar al hacer click fuera
+  document.addEventListener("click", function(e) {
+    if (!e.target.closest(".btn-login") && !e.target.closest("#submenuLogin")) {
+      submenu.classList.add("oculto");
+    }
+  });
+
+});
+</script>
+
 </head>
 <body class="fondo-gradiente">
   <!-- HEADER -->
@@ -155,14 +179,24 @@
   </div>
     <h1 onclick="location.href='index.html'" style="cursor:pointer;">Olimpiadas Juan Solano</h1>
     <nav>
-      <a href="index.html" class="activo">Inicio</a>
-      <a href="equipos.html">Equipos</a>
-      <a href="partidos.html">Partidos</a>
-      <a href="tabla.html">Tabla</a>
-      <a href="jugadores.html">Jugadores</a>
-      <a href="noticias.html">Noticias</a>
-      <a href="login.html" class="btn-login">Login</a>
-    </nav>
+  <a href="index.html" class="activo">Inicio</a>
+  <a href="equipos.html">Equipos</a>
+  <a href="partidos.html">Partidos</a>
+  <a href="tabla.html">Tabla</a>
+  <a href="jugadores.html">Jugadores</a>
+  <a href="noticias.html">Noticias</a>
+
+  <!-- BOTÓN LOGIN -->
+  <a href="#" class="btn-login" onclick="mostrarSubmenu(event)">Login ▼</a>
+
+  <!-- SUBMENÚ OCULTO -->
+  <div id="submenuLogin" class="submenu-login oculto">
+    <a href="nomina.html">📋 Nomina</a>
+    <a href="registro.html">📝 Registro</a>
+  </div>
+</nav>
+
+    
     <img src="img/Quilloac.jpg" alt="Escudo" class="logo-header" />
   </header>
 
