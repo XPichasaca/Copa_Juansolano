@@ -1,128 +1,15 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Panel Administrativo - Olimpiadas</title>
-<link rel="stylesheet" href="style.css" />
-<style>
-  body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-  }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Panel Administrativo - Olimpiadas Juan Solano</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="panel-admin fondo-gradiente">
 
-  /* =========================
-     MENU HORIZONTAL DISCIPLINAS
-  ========================= */
-  .menu-disciplinas {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #000f1e;
-    padding: 12px 10px;
-    gap: 15px;
-    position: sticky;
-    top: 0;
-    z-index: 10;
-    padding-top: 90px;
-  }
 
-  .menu-disciplinas .btn-d {
-    padding: 8px 15px;
-    background-color: #011628;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-
-  .menu-disciplinas .btn-d:hover {
-    background-color: #1565c0;
-  }
-
-  /* =========================
-     PANEL PRINCIPAL
-  ========================= */
-  .panel-container {
-    display: flex;
-    height: calc(100vh - 60px);
-    overflow: hidden;
-  }
-
-  .panel {
-    display: none;
-    flex: 1;
-    padding: 20px;
-    overflow-y: auto;
-  }
-
-  .panel-activo {
-    display: flex;
-  }
-
-  /* =========================
-     MENU VERTICAL INTERNO
-  ========================= */
-  .menu-lateral {
-    display: flex;
-    flex-direction: column;
-    width: 180px;
-    margin-right: 20px;
-  }
-
-  .menu-lateral .menu-btn {
-    margin: 5px 0;
-    padding: 8px;
-    cursor: pointer;
-    border: none;
-    border-radius: 4px;
-    background-color: #000312;
-    text-align: left;
-  }
-
-  .menu-lateral .menu-btn:hover {
-    background-color: #ddd;
-  }
-
-  /* =========================
-     CONTENIDO INTERNO
-  ========================= */
-  .contenido1 {
-    flex: 1;
-  }
-
-  .contenido1 section {
-    display: none;
-  }
-
-  .contenido1 section.seccion-activa {
-    display: block;
-  }
-
-  .btn-toggle {
-    padding: 5px 10px;
-    margin-bottom: 10px;
-    background-color: #2196f3;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-
-  .formulario.hidden { display: none; }
-
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 10px;
-  }
-
-  table, th, td { border: 1px solid #ccc; }
-  th, td { padding: 8px; text-align: left; }
-
-</style>
-
-  
+   <!-- ============================= 
   <header class="header-panel">
     <div class="logos-header">
       <img src="img/logo.png" alt="Logo campeonato" class="logo-header" />
@@ -131,29 +18,34 @@
     <h1>Panel Administrativo - Olimpiadas Juan Solano</h1>
     <button id="logoutBtn" class="btn-salir">Cerrar Sesión</button>
   </header>
+  -->
 
-</head>
-<body>
 
-<!-- MENU HORIZONTAL DE DISCIPLINAS -->
-<div class="menu-disciplinas">
-  <button class="btn-d" data-disciplina="futbol">⚽ Fútbol</button>
-  <button class="btn-d" data-disciplina="ecuavoley">🏐 Ecuavoley</button>
-  <button class="btn-d" data-disciplina="atletismo">🏃‍♂️ Atletismo</button>
-  <button class="btn-d" data-disciplina="waraka">🚴‍♂️ Ciclismo</button>
-<button class="btn-d" data-disciplina="ecuavoley">🪢 Onda (Waraka)</button>
-  <button class="btn-d" data-disciplina="atletismo">🏹 Tiro con Pallka</button>
-  <button class="btn-d" data-disciplina="waraka">💇‍♀️ Cabello más Largo</button>
 
+ <div class="menu-disciplinas">
+  <button onclick="mostrarDisciplina('panelFutbol')">⚽ Fútbol</button>
+  <button onclick="mostrarDisciplina('panelEcuavoley')">🏐 Ecuavoley</button>
+  <button onclick="mostrarDisciplina('panelAtletismo')">🏃‍♂️ Atletismo</button>
+  <button onclick="mostrarDisciplina('panelCiclismo')">🚴‍♂️ Ciclismo</button>
+  <button onclick="mostrarDisciplina('panelWaraka')">🪢 Onda (Waraka)</button>
+  <button onclick="mostrarDisciplina('panelPallka')">🏹 Tiro con Pallka</button>
+  <button onclick="mostrarDisciplina('panelCabello')">💇‍♀️ Cabello más Largo</button>
 </div>
 
-<!-- PANEL PRINCIPAL -->
-<div class="panel-container">
 
-  <!-- PANEL FUTBOL -->
-  <div id="panel-futbol" class="panel panel-activo">
-   
-     <div id="panelFutbol" class="panel-disciplinas" style="display:block;"></div>
+<div id="panelEcuavoley" class="panel-disciplinas">
+  <h2>Ecuavoley en construcción</h2>
+</div>
+
+<div id="panelAtletismo" class="panel-disciplinas">
+  <h2>Atletismo en construcción</h2>
+</div>
+
+<div id="panelCiclismo" class="panel-disciplinas">
+  <h2>Ciclismo en construcción</h2>
+</div>
+
+  <div id="panelFutbol" class="panel-disciplinas" style="display:block;"></div>
     <!-- Menú lateral -->
     <nav class="menu-lateral">
       <button class="menu-btn" data-section="equipos">🏆 Equipos</button>
@@ -460,224 +352,23 @@
   <p id="msgRegistroUsuario" style="margin-top:10px;"></p>
 </div>
 </section>
-
-</main>
-</div>
     
- <!-- =========================
-   PANEL ECUAVOLEY (INSERTAR EN registro.html)
-   ========================= -->
-<div id="panel-ecuavoley" class="panel">
-  <h2>🏐 Panel Ecuavóley</h2>
-
-  <!-- PARTICIPANTES -->
-  <section class="box">
-    <h3>Participantes - Ecuavóley</h3>
-
-    <form id="formParticipante" onsubmit="event.preventDefault(); guardarParticipante();">
-      <input type="hidden" id="participante_id" />
-
-      <label>Nombre completo</label><br>
-      <input type="text" id="nombre_completo" required><br>
-
-      <label>Fecha nacimiento</label><br>
-      <input type="date" id="fecha_nacimiento_part"><br>
-
-      <label>Equipo</label><br>
-      <select id="select_equipo_part" required></select><br>
-
-      <label>Categoría</label><br>
-      <select id="select_categoria_part" required></select><br><br>
-
-      <button type="submit" id="btnGuardarPart">Guardar</button>
-      <button type="button" id="btnActualizarPart" style="display:none" onclick="actualizarParticipante()">Actualizar</button>
-      <button type="button" onclick="resetFormParticipante()">Cancelar</button>
-    </form>
-
-    <h4>Lista de participantes</h4>
-    <table id="tablaParticipantes">
-      <thead>
-        <tr><th>#</th><th>Nombre</th><th>F. Nac.</th><th>Equipo</th><th>Categoría</th><th>Acciones</th></tr>
-      </thead>
-      <tbody></tbody>
-    </table>
-  </section>
-
-  <hr>
-
-  <!-- PARTIDOS / RESULTADOS -->
-<section class="box">
-    <h3>Partidos - Ecuavóley (sets)</h3>
-
-    <form id="formPartido" onsubmit="event.preventDefault(); guardarPartido();">
-      <input type="hidden" id="partido_id" />
-
-      <label>Fecha y hora</label><br>
-      <input type="datetime-local" id="fecha_partido" required><br>
-
-      <label>Lugar</label><br>
-      <input type="text" id="lugar_partido"><br>
-
-      <label>Cancha</label><br>
-      <input type="text" id="cancha_partido"><br>
-
-      <label>Categoría</label><br>
-      <select id="select_categoria_partido" required></select><br>
-
-      <label>Equipo A</label><br>
-      <select id="select_equipo_a" required></select><br>
-
-      <label>Equipo B</label><br>
-      <select id="select_equipo_b" required></select><br>
-
-      <!-- SETS -->
-      <div style="margin-top:10px;">
-        <label>Set 1 - Equipo A</label>
-        <input type="number" id="set1_a" min="0" style="width:70px">
-
-        <label>Equipo B</label>
-        <input type="number" id="set1_b" min="0" style="width:70px"><br>
-
-        <label>Set 2 - Equipo A</label>
-        <input type="number" id="set2_a" min="0" style="width:70px">
-
-        <label>Equipo B</label>
-        <input type="number" id="set2_b" min="0" style="width:70px"><br>
-
-        <label>Set 3 (opcional)</label><br>
-
-        <label>Equipo A</label>
-        <input type="number" id="set3_a" min="0" style="width:70px">
-
-        <label>Equipo B</label>
-        <input type="number" id="set3_b" min="0" style="width:70px"><br>
-      </div>
-
-      <!-- BOTONES -->
-      <br>
-      <button type="submit" id="btnGuardarPartido">Guardar Partido</button>
-      <button type="button" id="btnActualizarPartido" style="display:none" onclick="actualizarPartido()">Actualizar</button>
-      <button type="button" onclick="resetFormPartido()">Cancelar</button>
-    </form>
-
-    <h4>Lista de partidos</h4>
-    <table id="tabla-ecuavoley">
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>Fecha</th>
-          <th>Categoría</th>
-          <th>Equipo A</th>
-          <th>Equipo B</th>
-          <th>Sets</th>
-          <th>Lugar / Cancha</th>
-          <th>Acciones</th>
-        </tr>
-      </thead>
-      <tbody id="tbodyPartidos"></tbody>
-    </table>
-</section>
-
-
-
-  <!-- PANEL ATLETISMO -->
-  <div id="panel-atletismo" class="panel">
-    <h2>🏃 Panel Atletismo</h2>
-     <h1>🏐 Gestión de Partidos de Ecuavoley</h1>
-
-    <!-- FORMULARIO -->
-    <div>
-        <h2>Registrar / Editar Partido</h2>
-
-        <input type="hidden" id="id_editar">
-
-        <label>Equipo Local</label>
-        <input type="text" id="equipo_local">
-
-        <label>Equipo Visita</label>
-        <input type="text" id="equipo_visita">
-
-        <label>Categoría</label>
-        <input type="text" id="categoria">
-
-        <label>Fecha</label>
-        <input type="datetime-local" id="fecha">
-
-        <button id="btn-guardar" onclick="agregarEcuavoley()">Guardar</button>
-        <button id="btn-actualizar" onclick="actualizarEcuavoley()">Actualizar</button>
-    </div>
-
-    <hr>
-
-    <!-- TABLA -->
-    <h2>Listado de Partidos</h2>
-    <table>
-        <thead>
-            <tr>
-                <th>Equipo Local</th>
-                <th>Equipo Visita</th>
-                <th>Categoría</th>
-                <th>Fecha</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-
-        <tbody id="tabla-ecuavoley">
-            <!-- Aquí se insertan filas dinámicamente -->
-        </tbody>
-    </table>
-
-    <!-- EJECUTAR CARGA AL INICIO -->
-    <script>
-        window.onload = function () {
-            if (window.cargarEcuavoley) {
-                cargarEcuavoley();
-            } else {
-                console.error("⚠️ ERROR: cargarEcuavoley no está definida");
-            }
-        };
-    </script>
-  </div>
-
-  <!-- PANEL WARAKA -->
-  <div id="panel-waraka" class="panel">
-    <h2>🚴 Panel Ciclismo</h2>
-    <p>Contenido de Ciclismo...</p>
-    
-  </div>
-
+    </main>
 </div>
 
   <footer>
     <p>Comuna Quilloac | Desarrollado por <strong>Xavier Pichasaca</strong> © 2025</p>
   </footer>
 
-
-<script>
-  // CAMBIO DE DISCIPLINA
-  const botones = document.querySelectorAll('.menu-disciplinas .btn-d');
-  botones.forEach(btn => {
-    btn.addEventListener('click', () => {
-      const id = btn.getAttribute('data-disciplina');
-      document.querySelectorAll('.panel').forEach(panel => panel.classList.remove('panel-activo'));
-      const panel = document.getElementById('panel-' + id);
-      if(panel) panel.classList.add('panel-activo');
-    });
-  });
-
-  // MENU VERTICAL FÚTBOL
-  const menuBtns = document.querySelectorAll('#panel-futbol .menu-btn');
-  const secciones = document.querySelectorAll('#panel-futbol .contenido1 section');
-  menuBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      secciones.forEach(sec => sec.classList.remove('seccion-activa'));
-      const sec = document.getElementById(btn.dataset.section);
-      if(sec) sec.classList.add('seccion-activa');
-    });
-  });
+  <script>
+function mostrarDisciplina(id) {
+  document.querySelectorAll('.panel-disciplinas').forEach(p => p.style.display = 'none');
+  document.getElementById(id).style.display = 'block';
+}
 </script>
 
-<script type="module">
+
+ <script type="module">
   import { supabase } from "./supabaseClient.js";
 
   const formRegistro = document.getElementById("formRegistroUsuario");
@@ -723,16 +414,5 @@
   </script>
 
   <script type="module" src="partidospublico.js"></script>
-
-
-  <script type="module" src="ecuavoley.js"></script>
-
-<script>
-  // cargar datos al abrir la página
-  window.onload = () => {
-    cargarEcuavoley();
-  };
-</script>
-
 </body>
 </html>
