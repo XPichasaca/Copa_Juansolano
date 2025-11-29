@@ -6,6 +6,8 @@ const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
 const partidosEnVivo = document.getElementById("partidosEnVivo");
 
+
+
 // Función para cargar partidos en vivo
 async function cargarPartidosEnVivo() {
   try {
