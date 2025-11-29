@@ -1,4 +1,9 @@
-import { supabase } from "./script.js";
+import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
+
+const SUPABASE_URL = "https://tu-proyecto.supabase.co";
+const SUPABASE_KEY = "sb_publishable_..."; // tu clave pública
+export const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+
 
 // === Obtener rango de la semana actual (lunes a domingo) ===
 function obtenerRangoSemana() {

@@ -1,4 +1,10 @@
-import { supabase } from "./script.js";
+import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
+
+const SUPABASE_URL = "https://ghstgwywcaxtfdyyjxli.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_bm3rEZ92WLzBkxqpvWCu0w_oG4Cr9YZ"; // anon key pública
+
+export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
 
 async function cargarPartidosPublico() {
   const cont = document.getElementById("cardsEcuavoleyPublico");
