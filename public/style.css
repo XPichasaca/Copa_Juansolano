@@ -1902,3 +1902,108 @@ nav {
   text-align: center;
 }
 
+/* Contenedor general */
+#partidosEnVivo {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  font-family: Arial, sans-serif;
+}
+
+/* Tarjeta de cada partido */
+.partido-en-vivo {
+  background: linear-gradient(135deg, #f7f7f7, #e0e0e0);
+  border-radius: 10px;
+  padding: 15px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  transition: transform 0.2s;
+}
+
+.partido-en-vivo:hover {
+  transform: scale(1.02);
+}
+
+/* Encabezado del partido */
+.partido-en-vivo .encabezado {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: bold;
+  font-size: 1.2em;
+  margin-bottom: 10px;
+}
+
+.partido-en-vivo .equipo {
+  flex: 1;
+  text-align: center;
+}
+
+.partido-en-vivo .marcador {
+  font-size: 1.5em;
+  color: #333;
+}
+
+.partido-en-vivo .estado {
+  color: red;
+  font-weight: bold;
+}
+
+/* Historial de eventos */
+.historial-eventos {
+  background: #fff;
+  border-radius: 8px;
+  padding: 10px;
+  font-size: 0.95em;
+  max-height: 200px;
+  overflow-y: auto;
+  border: 1px solid #ccc;
+}
+
+/* Cada evento */
+.historial-eventos div {
+  padding: 3px 5px;
+  margin-bottom: 2px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 5px;
+}
+
+/* Goles y tarjetas con colores */
+.historial-eventos div:before {
+  content: "";
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.historial-eventos div:has(span⚽) {
+  color: green;
+}
+
+.historial-eventos div:has(.⚽):before {
+  background-color: green;
+}
+
+.historial-eventos div:has(.🟨):before {
+  background-color: yellow;
+}
+
+.historial-eventos div:has(.🟥):before {
+  background-color: red;
+}
+
+/* Scroll estilo */
+.historial-eventos::-webkit-scrollbar {
+  width: 6px;
+}
+
+.historial-eventos::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 3px;
+}
+
+.historial-eventos::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
