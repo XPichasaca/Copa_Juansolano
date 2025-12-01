@@ -228,49 +228,67 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     <!-- POSICIONES -->
-    <section id="posiciones-seccion" class="seccion">
-      <div class="card">
-        <h2>🏆 Tablas de Posiciones</h2>
-        <div class="tablas-dobles">
-          <div class="tabla-columna">
-            <h3>🧔 Masculino</h3>
-            <table id="resumenTablaMasculino">
-              <thead>
-                <tr>
-                  <th>#</th>
-                  <th>Equipo</th>
-                  <th>Pts</th>
-                  <th>PJ</th>
-                  <th>DG</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr><td>1</td><td>Team A</td><td>12</td><td>5</td><td>8</td></tr>
-                <tr><td>2</td><td>Team B</td><td>10</td><td>5</td><td>5</td></tr>
-              </tbody>
-            </table>
-          </div>
-          <div class="tabla-columna">
-            <h3>👩 Femenino</h3>
-            <table id="resumenTablaFemenino">
-              <thead>
-                <tr>
-                  <th>#</th>
-                  <th>Equipo</th>
-                  <th>Pts</th>
-                  <th>PJ</th>
-                  <th>DG</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr><td>1</td><td>Team C</td><td>15</td><td>5</td><td>12</td></tr>
-                <tr><td>2</td><td>Team D</td><td>9</td><td>5</td><td>3</td></tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
+<section id="posiciones-seccion" class="seccion">
+  <div class="card">
+    <h2>🏆 Tablas de Posiciones</h2>
+
+    <!-- Botón para compartir sección completa -->
+    <button onclick="compartirSeccion('facebook','#posiciones-seccion')">
+      Compartir Posiciones
+    </button>
+
+    <div class="tablas-dobles">
+
+      <div class="tabla-columna" id="tablaMasculino">
+        <h3>🧔 Masculino</h3>
+        <button onclick="compartirSeccion('facebook','#tablaMasculino')">
+          Compartir Masculino
+        </button>
+
+        <table id="resumenTablaMasculino">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Equipo</th>
+              <th>Pts</th>
+              <th>PJ</th>
+              <th>DG</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>1</td><td>Team A</td><td>12</td><td>5</td><td>8</td></tr>
+            <tr><td>2</td><td>Team B</td><td>10</td><td>5</td><td>5</td></tr>
+          </tbody>
+        </table>
       </div>
-    </section>
+
+      <div class="tabla-columna" id="tablaFemenino">
+        <h3>👩 Femenino</h3>
+        <button onclick="compartirSeccion('facebook','#tablaFemenino')">
+          Compartir Femenino
+        </button>
+
+        <table id="resumenTablaFemenino">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Equipo</th>
+              <th>Pts</th>
+              <th>PJ</th>
+              <th>DG</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>1</td><td>Team C</td><td>15</td><td>5</td><td>12</td></tr>
+            <tr><td>2</td><td>Team D</td><td>9</td><td>5</td><td>3</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </div>
+</section>
+
 
 <!-- GOLEADORES --> <section id="goleadores-seccion" class="seccion"> <div class="card"> <h2>⚽ Tabla de Goleadores</h2> <div id="contenedorGoleadores" class="contenedor-dos-columnas"> <!-- Se cargan automáticamente desde GoleadorTarjeta.js --> </div> </div> </section> <!-- TARJETAS --> <section id="tarjetas-seccion" class="seccion"> <div class="card"> <h2>🟨 Tabla de Amonestados</h2> <div id="contenedorTarjetas" class="contenedor-dos-columnas"> <!-- Se cargan automáticamente desde GoleadorTarjeta.js --> </div> </div> </section>
 
@@ -388,6 +406,30 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 </script>
+
+<script>
+function compartirSeccion(red, hash) {
+  const base = window.location.href.split('#')[0]; // URL sin ancla
+  const url = encodeURIComponent(base + hash);
+
+  let link = "";
+
+  switch (red) {
+    case "facebook":
+      link = `https://www.facebook.com/sharer/sharer.php?u=${url}`;
+      break;
+    case "twitter":
+      link = `https://twitter.com/intent/tweet?url=${url}`;
+      break;
+    case "whatsapp":
+      link = `https://api.whatsapp.com/send?text=${url}`;
+      break;
+  }
+
+  window.open(link, "_blank", "width=600,height=500");
+}
+</script>
+
 
 </body>
 </html>
