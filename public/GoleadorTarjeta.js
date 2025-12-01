@@ -4,7 +4,7 @@
 import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
 
 const SUPABASE_URL = "https://ghstgwywcaxtfdyyjxli.supabase.co";
-const SUPABASE_KEY = "sb_publishable_bm3rEZ92WLzBkxqpvWCu0w_oG4Cr9YZ"; // Public Anon Key
+const SUPABASE_KEY = "sb_publishable_bm3rEZ92WLzBkxqpvWCu0w_oG4Cr9YZ";
 const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
 // ==========================
@@ -27,11 +27,11 @@ async function cargarEstadisticas() {
         jugador:jugador_id (
           id,
           nombre,
-          categoria,
           equipo:equipo_id (
             id,
             nombre,
-            logo_url
+            logo_url,
+            categoria
           )
         ),
         partido:partido_id (
@@ -48,8 +48,11 @@ async function cargarEstadisticas() {
 
     data.forEach(e => {
       if (!e.jugador) return;
+
       const j = e.jugador;
       const equipo = j.equipo || {};
+      const categoria = equipo.categoria?.toLowerCase() || "sin_categoria";
+
       const partido = e.partido
         ? `${e.partido.equipo_local?.nombre || "?"} vs ${e.partido.equipo_visitante?.nombre || "?"}`
         : "Sin partido";
@@ -61,7 +64,7 @@ async function cargarEstadisticas() {
         if (!mapaGoles.has(clave)) {
           mapaGoles.set(clave, {
             jugador: j.nombre,
-            categoria: j.categoria || "Sin categoría",
+            categoria,
             equipo: equipo.nombre,
             logo: equipo.logo_url || "img/logo.png",
             goles: [],
@@ -75,22 +78,28 @@ async function cargarEstadisticas() {
         if (!mapaTarjetas.has(clave)) {
           mapaTarjetas.set(clave, {
             jugador: j.nombre,
-            categoria: j.categoria || "Sin categoría",
+            categoria,
             equipo: equipo.nombre,
             logo: equipo.logo_url || "img/logo.png",
             tarjetas: [],
           });
         }
-        mapaTarjetas.get(clave).tarjetas.push({ tipo: e.tipo_evento, minuto: e.minuto, partido });
+        mapaTarjetas.get(clave).tarjetas.push({
+          tipo: e.tipo_evento,
+          minuto: e.minuto,
+          partido
+        });
       }
     });
 
+    // ==========================
     // Clasificar por categoría
-    const golesMasculino = [...mapaGoles.values()].filter(g => g.categoria?.toLowerCase().includes("masculino"));
-    const golesFemenino = [...mapaGoles.values()].filter(g => g.categoria?.toLowerCase().includes("femenino"));
+    // ==========================
+    const golesMasculino = [...mapaGoles.values()].filter(g => g.categoria === "masculino");
+    const golesFemenino = [...mapaGoles.values()].filter(g => g.categoria === "femenino");
 
-    const tarjetasMasculino = [...mapaTarjetas.values()].filter(g => g.categoria?.toLowerCase().includes("masculino"));
-    const tarjetasFemenino = [...mapaTarjetas.values()].filter(g => g.categoria?.toLowerCase().includes("femenino"));
+    const tarjetasMasculino = [...mapaTarjetas.values()].filter(t => t.categoria === "masculino");
+    const tarjetasFemenino = [...mapaTarjetas.values()].filter(t => t.categoria === "femenino");
 
     renderGoleadores(golesMasculino, golesFemenino);
     renderTarjetas(tarjetasMasculino, tarjetasFemenino);
@@ -112,6 +121,7 @@ function renderGoleadores(masculino, femenino) {
         <tbody>${crearFilasGoles(masculino)}</tbody>
       </table>
     </div>
+
     <div class="columna">
       <h3>⚽ Femenino</h3>
       <table class="tabla">
@@ -152,12 +162,13 @@ function renderTarjetas(masculino, femenino) {
         <tbody>${crearFilasTarjetas(masculino)}</tbody>
       </table>
     </div>
+
     <div class="columna">
       <h3>🟨 Femenino</h3>
       <table class="tabla">
         <thead><tr><th>Jugador</th><th>Equipo</th><th>Detalles</th><th>Total</th></tr></thead>
         <tbody>${crearFilasTarjetas(femenino)}</tbody>
-      </div>
+      </table>
     </div>
   `;
 }
@@ -174,7 +185,11 @@ function crearFilasTarjetas(lista) {
 
       const historial = t.tarjetas
         .map(e => {
-          const icon = e.tipo === "amarilla" ? "🟨" : e.tipo === "roja_directa" ? "🟥" : "🟨🟨🟥";
+          const icon = e.tipo === "amarilla"
+            ? "🟨"
+            : e.tipo === "roja_directa"
+            ? "🟥"
+            : "🟨🟨🟥";
           return `${icon} ${e.minuto}' — <i>${e.partido}</i>`;
         })
         .join("<br>");
