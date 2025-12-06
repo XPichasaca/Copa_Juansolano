@@ -2,7 +2,7 @@
 // 🔗 Inicialización Supabase
 // =========================
 
-import { createClient } from "https://unpkg.com/@supabase/supabase-js@2/dist/esm/index.js";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 
 export const supabase = createClient(

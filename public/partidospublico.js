@@ -1,12 +1,12 @@
 // ==============================
 // 📦 Conexión pública a Supabase
 // ==============================
-import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
-// ⚙️ Configuración de tu proyecto Supabase
-const SUPABASE_URL = "https://ghstgwywcaxtfdyyjxli.supabase.co";
-const SUPABASE_KEY = "sb_publishable_bm3rEZ92WLzBkxqpvWCu0w_oG4Cr9YZ"; // Clave pública (anon)
-export const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+const supabase = createClient(
+  "https://ghstgwywcaxtfdyyjxli.supabase.co",
+  "sb_publishable_bm3rEZ92WLzBkxqpvWCu0w_oG4Cr9YZ"
+);
 
 // ==============================
 // ⚽ CARGAR PARTIDOS (público)
