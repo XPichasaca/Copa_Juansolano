@@ -89,3 +89,23 @@ if (process.env.NODE_ENV !== "production") {
     console.log(`🔵 Servidor corriendo en http://localhost:${PORT}`);
   });
 }
+
+app.get("/test-partidos", async (req, res) => {
+  try {
+    const { data, error } = await supabase
+      .from("partidos")
+      .select("*");
+
+    if (error) {
+      console.error("❌ Error al consultar Supabase:", error);
+      return res.status(500).json({ error: error.message });
+    }
+
+    console.log("📌 Datos obtenidos de 'partidos':", data);
+    res.json(data);
+
+  } catch (err) {
+    console.error("❌ Error general:", err);
+    res.status(500).json({ error: err.message });
+  }
+});
