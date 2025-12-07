@@ -122,14 +122,43 @@
 
 </style>
 
-  
-  <header class="header-panel">
-    <div class="logos-header">
-      <img src="img/logo.png" alt="Logo campeonato" class="logo-header" />
-      <img src="img/logo_institucion.png" alt="Logo institucional" class="logo-header-sec" />
-    </div>
-    <h1>Panel Administrativo - Olimpiadas Juan Solano</h1>
+</head>
+<body class="fondo-gradiente">
+  <!-- HEADER -->
+  <header>
+    <img
+      src="img/logss.png"
+      alt="Logo"
+      class="logo-header"
+      onclick="location.href='index.html'"
+    />
+    <!-- 🔹 Botón hamburguesa -->
+  <div class="menu-toggle">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+    <h1 onclick="location.href='index.html'" style="cursor:pointer;">Olimpiadas Juan Solano</h1>
+    <h1>Panel Administrativo</h1>
+    <nav>
+  <a href="index.html" class="activo">Inicio</a>
+  <a href="equipos.html">Equipos</a>
+  <a href="partidos.html">Partidos</a>
+  <a href="tabla.html">Tabla</a>
+  <a href="jugadores.html">Jugadores</a>
+  <a href="noticias.html">Noticias</a>
+
+  <!-- BOTÓN LOGIN -->
+  <a href="#" class="btn-login" onclick="mostrarSubmenu(event)">Login ▼</a>
+
+  <!-- SUBMENÚ OCULTO -->
+  <div id="submenuLogin" class="submenu-login oculto">
+    <a href="nomina.html">📋 Nomina</a>
+    <a href="registro.html">📝 Registro</a>
+  </div>
     <button id="logoutBtn" class="btn-salir">Cerrar Sesión</button>
+</nav>    
+    <img src="img/Quilloac.jpg" alt="Escudo" class="logo-header" />
   </header>
 
 </head>
@@ -732,6 +761,7 @@
   window.onload = () => {
     cargarEcuavoley();
   };
+
 </script>
 
 </body>

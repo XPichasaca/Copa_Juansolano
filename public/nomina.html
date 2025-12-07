@@ -37,6 +37,7 @@ h1 {
   padding: 14px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
   z-index: 1000;
+  margin-top: 80px;
 }
 
 .menu-top button {
@@ -191,10 +192,55 @@ textarea {
   margin-left: 5px;
 }
 
+
+
+
+
 </style>
 </head>
+<body class="fondo-gradiente">
+  <!-- HEADER -->
+  <header>
+    <img
+      src="img/logss.png"
+      alt="Logo"
+      class="logo-header"
+      onclick="location.href='index.html'"
+    />
+    <!-- 🔹 Botón hamburguesa -->
+  <div class="menu-toggle">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+    <h1 onclick="location.href='index.html'" style="cursor:pointer;">Olimpiadas Juan Solano</h1>
+    <nav>
+  <a href="index.html" class="activo">Inicio</a>
+  <a href="equipos.html">Equipos</a>
+  <a href="partidos.html">Partidos</a>
+  <a href="tabla.html">Tabla</a>
+  <a href="jugadores.html">Jugadores</a>
+  <a href="noticias.html">Noticias</a>
+
+  <!-- BOTÓN LOGIN -->
+  <a href="#" class="btn-login" onclick="mostrarSubmenu(event)">Login ▼</a>
+
+  <!-- SUBMENÚ OCULTO -->
+  <div id="submenuLogin" class="submenu-login oculto">
+    <a href="nomina.html">📋 Nomina</a>
+    <a href="registro.html">📝 Registro</a>
+  </div>
+    <button id="logoutBtn" class="btn-salir">Cerrar Sesión</button>
+</nav>
+    
+    <img src="img/Quilloac.jpg" alt="Escudo" class="logo-header" />
+  </header>
 
 <body>
+
+
+
+  
   <!-- MENÚ SUPERIOR -->
   <div class="menu-top">
     <button class="tab-btn active" data-tab="tabNomina">Registrar Nómina</button>
@@ -358,6 +404,7 @@ textarea {
   <div id="mensajes"></div>
 
   <script type="module" src="./partidosEstadistica.js"></script>
+    <script type="module" src="./registro.js"></script>
 
   <script type="module">
     import { validarAcceso } from "./validaAcceso.js";
@@ -376,5 +423,23 @@ textarea {
       });
     });
   </script>
+
+  <script>
+  const logoutBtn = document.getElementById("logoutBtn");
+
+  logoutBtn.addEventListener("click", () => {
+    // Eliminar rol guardado en localStorage
+    localStorage.removeItem("rol");
+
+    // Si usas Supabase para login
+    if (typeof supabase !== "undefined") {
+      supabase.auth.signOut().catch(err => console.log(err));
+    }
+
+    // Redirigir a login
+    window.location.href = "login.html";
+  });
+</script>
+
 </body>
 </html>

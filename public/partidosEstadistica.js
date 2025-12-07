@@ -120,9 +120,16 @@ async function loadAlineaciones() {
 // --- CARGA DE JUGADORES SANCIONADOS ---
 async function loadSancionados() {
   sancionados = new Set();
-  const { data } = await supabase.from("vista_sanciones_activas").select("jugador_id");
-  data?.forEach(s => sancionados.add(s.jugador_id));
+
+  // Traer solo los sancionados activos
+  const { data } = await supabase.from("vista_sanciones_completa")
+    .select("jugador_id, activo");
+
+  data?.forEach(s => {
+    if (s.activo) sancionados.add(s.jugador_id); // solo los que todavía tienen sanción
+  });
 }
+
 
 // --- RENDER NÓMINA ---
 function renderNominaTables() {
@@ -224,49 +231,67 @@ menuEventos.querySelectorAll("button").forEach(btn => {
     let por_jugador_id = null;
     const minuto = minutos;
 
-    // Validar tarjetas y cambios
-    if (tipo === "amarilla" || tipo === "roja") {
-      const tarjetas = eventosPartido.filter(e =>
-        e.jugador_id === jugador_id &&
-        ["amarilla", "roja_directa", "roja_doble_amarilla"].includes(e.tipo_evento)
-      );
-      const amarillas = tarjetas.filter(e => e.tipo_evento === "amarilla").length;
-      const rojas = tarjetas.filter(e => ["roja_directa", "roja_doble_amarilla"].includes(e.tipo_evento)).length;
+    // Validar tarjetas
+if (tipo === "amarilla" || tipo === "roja") {
+  const tarjetas = eventosPartido.filter(e =>
+    e.jugador_id === jugador_id &&
+    ["amarilla", "roja_directa", "roja_doble_amarilla"].includes(e.tipo_evento)
+  );
 
-      if (tipo === "amarilla") {
-        if (amarillas >= 2 || rojas >= 1) return showMsg("No puede recibir más tarjetas");
-        if (amarillas === 1) {
-          await supabase.from("estadisticas").insert([{
-            partido_id: partido.id,
-            jugador_id,
-            tipo_evento: "roja_doble_amarilla",
-            minuto,
-            por_jugador_id: null
-          }]);
-          await supabase.from("sanciones").insert([{
-            jugador_id,
-            partido_id: partido.id,
-            tipo: "doble_amarilla",
-            partidos_suspendidos: SUSPENSIONES.doble_amarilla
-          }]);
-          showMsg("Segunda amarilla → Roja doble amarilla ⚠️");
-          await loadSancionados(); renderNominaTables(); await renderEventosHistory(); renderResumenPartido();
-          return;
-        }
-      }
+  const amarillas = tarjetas.filter(e => e.tipo_evento === "amarilla").length;
+  const rojas = tarjetas.filter(e => ["roja_directa", "roja_doble_amarilla"].includes(e.tipo_evento)).length;
 
-      if(tipo==="roja" && rojas>=1) return showMsg("Jugador ya tiene roja");
-      if(tipo==="roja") {
-        await supabase.from("sanciones").insert([{
-          jugador_id, partido_id: partido.id, tipo:"roja_directa", partidos_suspendidos: SUSPENSIONES.roja_directa
-        }]);
-      }
+  // Segunda amarilla → roja
+  if (tipo === "amarilla") {
+    if (rojas >= 1) return showMsg("Jugador ya tiene roja");
+    if (amarillas === 1) {
+      await supabase.from("estadisticas").insert([{
+        partido_id: partido.id,
+        jugador_id,
+        tipo_evento: "roja_doble_amarilla",
+        minuto,
+        por_jugador_id: null
+      }]);
+      await supabase.from("sanciones").insert([{
+        jugador_id,
+        partido_id: partido.id,
+        tipo: "doble_amarilla",
+        partidos_suspendidos: SUSPENSIONES.doble_amarilla
+      }]);
+      showMsg("Segunda amarilla → Roja 🟥");
+      await loadSancionados(); 
+      renderNominaTables(); 
+      await renderEventosHistory(); 
+      renderResumenPartido();
+      return;
     }
+  }
 
-    if(tipo==="entra" || tipo==="sale") {
-      const selPor = tipo==="entra"?selJugadorSale:selJugadorEntra;
-      if(selPor.value) por_jugador_id = parseInt(selPor.value);
-    }
+  // Roja directa
+  if (tipo === "roja") {
+    if (rojas >= 1) return showMsg("Jugador ya tiene roja");
+    await supabase.from("estadisticas").insert([{
+      partido_id: partido.id,
+      jugador_id,
+      tipo_evento: "roja_directa",
+      minuto,
+      por_jugador_id: null
+    }]);
+    await supabase.from("sanciones").insert([{
+      jugador_id,
+      partido_id: partido.id,
+      tipo: "roja_directa",
+      partidos_suspendidos: SUSPENSIONES.roja_directa
+    }]);
+    showMsg("Roja directa registrada 🟥");
+    await loadSancionados(); 
+    renderNominaTables(); 
+    await renderEventosHistory(); 
+    renderResumenPartido();
+    return;
+  }
+}
+
 
     // Insertar evento
     const { error: errInsert } = await supabase.from("estadisticas").insert([{

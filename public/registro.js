@@ -21,11 +21,7 @@ const cancelarBtn = document.getElementById("cancelar");
 const logoutBtn = document.getElementById("logoutBtn");
 const formContainer = document.querySelector(".card-registro");
 
-// 🚪 Cerrar sesión
-logoutBtn.addEventListener("click", async () => {
-  await supabase.auth.signOut();
-  window.location.href = "login.html";
-});
+
 
 // 📥 Cargar equipos
 async function cargarEquipos() {

@@ -35,9 +35,9 @@ document.getElementById("loginForm").addEventListener("submit", async (e) => {
 
   setTimeout(() => {
     if (perfilData.role === "admin") {
-      window.location.href = "registro.html";
-    } else if (perfilData.role === "control") {
       window.location.href = "nomina.html";
+    } else if (perfilData.role === "control") {
+      window.location.href = "registro.html";
     } else {
       alert("Rol no válido. Contacta al administrador.");
     }
