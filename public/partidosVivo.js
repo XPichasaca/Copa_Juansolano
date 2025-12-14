@@ -192,6 +192,8 @@ async function cargarEventosPartido(partidoId) {
       if (e.tipo_evento === "roja_directa") icon = "🟥";
          if (e.tipo_evento === "roja_doble_amarilla") icon = "🟨🟨🟥";
       
+
+         
       return `<div>${icon} ${e.jugador?.nombre || e.jugador} - ${e.minuto}'</div>`;
     }).join("");
   } catch (err) {
