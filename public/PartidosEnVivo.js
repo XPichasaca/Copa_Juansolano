@@ -6,8 +6,6 @@ const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
 const partidosEnVivo = document.getElementById("partidosEnVivo");
 
-
-
 // Función para cargar partidos en vivo
 async function cargarPartidosEnVivo() {
   try {
@@ -19,8 +17,8 @@ async function cargarPartidosEnVivo() {
         estado,
         marcador_local,
         marcador_visitante,
-        equipo_local:equipo_local_id(nombre),
-        equipo_visitante:equipo_visitante_id(nombre)
+        equipo_local:equipo_local_id(nombre, logo_url),
+        equipo_visitante:equipo_visitante_id(nombre, logo_url)
       `)
       .eq("estado", "en_vivo")
       .order("fecha", { ascending: true });
@@ -37,15 +35,33 @@ async function cargarPartidosEnVivo() {
     partidos.forEach(p => {
       const div = document.createElement("div");
       div.classList.add("partido-en-vivo");
-      div.innerHTML = `
-        <div class="encabezado">
-          <span class="equipo">${p.equipo_local?.nombre || "Local"}</span>
-          <span class="marcador">${p.marcador_local || 0} - ${p.marcador_visitante || 0}</span>
-          <span class="equipo">${p.equipo_visitante?.nombre || "Visitante"}</span>
-          <span class="estado">🔴 EN VIVO</span>
-        </div>
-        <div id="historial-${p.id}" class="historial-eventos">Cargando eventos...</div>
-      `;
+
+        div.innerHTML = `
+  <div class="encabezado">
+    
+    <div class="equipo local">
+      <img src="${p.equipo_local?.logo_url || 'logo-default.png'}" alt="Logo local">
+      <span>${p.equipo_local?.nombre || "Local"}</span>
+    </div>
+
+    <span class="marcador">
+      ${p.marcador_local || 0} - ${p.marcador_visitante || 0}
+    </span>
+
+    <div class="equipo visitante">
+      <img src="${p.equipo_visitante?.logo_url || 'logo-default.png'}" alt="Logo visitante">
+      <span>${p.equipo_visitante?.nombre || "Visitante"}</span>
+    </div>
+
+    <span class="estado">🔴 EN VIVO</span>
+  </div>
+
+  <div id="historial-${p.id}" class="historial-eventos">
+    Cargando eventos...
+  </div>
+`;
+
+
       partidosEnVivo.appendChild(div);
 
       // Cargar eventos del partido
@@ -57,6 +73,7 @@ async function cargarPartidosEnVivo() {
     partidosEnVivo.innerHTML = "<p>Error cargando partidos en vivo</p>";
   }
 }
+
 
 // Función para cargar eventos de un partido
 async function cargarEventosPartido(partidoId) {
@@ -84,14 +101,19 @@ async function cargarEventosPartido(partidoId) {
     cont.innerHTML = eventos.map(e => {
       let icon = "";
       if (e.tipo_evento === "gol") icon = "⚽";
-      if (e.tipo_evento === "tarjeta_amarilla") icon = "🟨";
-      if (e.tipo_evento === "tarjeta_roja") icon = "🟥";
+      if (e.tipo_evento === "amarilla") icon = "🟨";
+      if (e.tipo_evento === "roja_directa") icon = "🟥";
+         if (e.tipo_evento === "roja_doble_amarilla") icon = "🟨🟨🟥";
+      
+
+         
       return `<div>${icon} ${e.jugador?.nombre || e.jugador} - ${e.minuto}'</div>`;
     }).join("");
   } catch (err) {
     console.error("Error cargando eventos:", err);
   }
 }
+
 
 // Realtime: actualizar automáticamente
 supabase
