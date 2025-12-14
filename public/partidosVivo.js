@@ -1,4 +1,9 @@
-import { supabase } from "./script.js";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+
+const SUPABASE_URL = "https://ghstgwywcaxtfdyyjxli.supabase.co";
+const SUPABASE_KEY = "sb_publishable_bm3rEZ92WLzBkxqpvWCu0w_oG4Cr9YZ";
+const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+
 
 // Función para cargar partidos por día
 async function cargarJornada() {
