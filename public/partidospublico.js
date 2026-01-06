@@ -110,6 +110,8 @@ async function cargarPartidosPublico() {
   }
 }
 
+
+
 // ==============================
 // 🔄 Actualización en tiempo real
 // ==============================
@@ -123,3 +125,4 @@ supabase
 // 🚀 Inicio
 // ==============================
 cargarPartidosPublico();
+

@@ -605,6 +605,79 @@
       </thead>
       <tbody id="tbodyPartidos"></tbody>
     </table>
+
+    <div class="box">
+  <h2>🏐 Registro de Resultados – Ecuavóley</h2>
+
+  <!-- FILTRO -->
+  <label>Categoría</label><br>
+  <select id="select_categoria_partido"></select>
+
+  <hr>
+
+  <!-- FORMULARIO RESULTADOS -->
+  <form id="formPartido" onsubmit="event.preventDefault(); guardarPartido();">
+
+    <input type="hidden" id="partido_id">
+
+    <label>Partido</label><br>
+    <select id="select_partido" onchange="cargarDatosPartido()" required></select>
+
+    <h3>Resultados</h3>
+
+    <!-- SET 1 -->
+    <label>Set 1</label><br>
+    Equipo A
+    <input type="number" id="set1_a" min="0" oninput="controlarSet3()" required>
+    Equipo B
+    <input type="number" id="set1_b" min="0" oninput="controlarSet3()" required>
+
+    <br><br>
+
+    <!-- SET 2 -->
+    <label>Set 2</label><br>
+    Equipo A
+    <input type="number" id="set2_a" min="0" oninput="controlarSet3()" required>
+    Equipo B
+    <input type="number" id="set2_b" min="0" oninput="controlarSet3()" required>
+
+    <br><br>
+
+    <!-- SET 3 -->
+    <label>Set 3 (solo si hay empate)</label><br>
+    Equipo A
+    <input type="number" id="set3_a" min="0" disabled>
+    Equipo B
+    <input type="number" id="set3_b" min="0" disabled>
+
+    <br><br>
+
+    <button type="submit">Guardar Resultado</button>
+    <button type="button" onclick="resetFormPartido()">Cancelar</button>
+
+  </form>
+</div>
+
+<!-- TABLA SOLO LECTURA -->
+<div class="box">
+  <h3>📋 Resultados Registrados</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Fecha</th>
+        <th>Partido</th>
+        <th>Resultado</th>
+      </tr>
+    </thead>
+    <tbody id="tbodyPartidos"></tbody>
+  </table>
+</div>
+
+<!-- JS -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="resultadosEcuavoley.js"></script>
+
 </section>
 
 

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Ecuavóley – Resultados y Posiciones</title>
+
+<style>
+body { font-family: Arial; }
+table { border-collapse: collapse; width: 100%; margin-top: 10px; }
+th, td { border: 1px solid #ccc; padding: 6px; text-align: center; }
+th { background: #f2f2f2; }
+img { vertical-align: middle; border-radius: 4px; }
+</style>
+</head>
+
+<body>
+
+<h2>🏐 Resultados Ecuavóley</h2>
+
+<select id="filtroCategoria"></select>
+
+<table>
+<thead>
+<tr>
+  <th>Fecha</th>
+  <th>Equipo A</th>
+  <th>Equipo B</th>
+  <th>S1</th>
+  <th>S2</th>
+  <th>S3</th>
+</tr>
+</thead>
+<tbody id="tbodyResultados"></tbody>
+</table>
+
+<hr>
+
+<h2>📊 Tabla de Posiciones</h2>
+
+<table>
+<thead>
+<tr>
+  <th>Equipo</th>
+  <th>PJ</th>
+  <th>PG</th>
+  <th>PP</th>
+  <th>Sets +</th>
+  <th>Sets -</th>
+  <th>Puntos</th>
+</tr>
+</thead>
+<tbody id="tbodyPosiciones"></tbody>
+</table>
+
+<script type="module" src="script.js"></script>
+<script type="module" src="resultadosEcuavoley.js"></script>
+<script type="module" src="posicionesEcuavoley.js"></script>
+
+</body>
+</html>
