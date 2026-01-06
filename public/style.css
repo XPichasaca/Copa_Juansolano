@@ -2135,3 +2135,124 @@ nav {
 }
 
 
+/* RESET BÁSICO */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", Arial, sans-serif;
+  background: #f4f6f8;
+  color: #333;
+}
+
+/* CONTENEDOR */
+.container {
+  max-width: 1200px;
+  margin: auto;
+  padding: 20px;
+}
+
+/* TÍTULOS */
+h2 {
+  margin-top: 30px;
+  margin-bottom: 10px;
+  color: #1f3c88;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* FILTRO */
+.filtro {
+  margin: 10px 0 15px;
+}
+
+.filtro label {
+  font-weight: 600;
+  margin-right: 8px;
+}
+
+select {
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 1px solid #bbb;
+  font-size: 14px;
+}
+
+/* TARJETAS */
+.card {
+  background: #fff;
+  border-radius: 10px;
+  padding: 10px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+  overflow-x: auto;
+}
+
+/* TABLAS */
+.tabla {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.tabla thead {
+  background: linear-gradient(90deg, #1f3c88, #3f72af);
+  color: #fff;
+}
+
+.tabla th,
+.tabla td {
+  padding: 8px;
+  text-align: center;
+}
+
+.tabla tbody tr:nth-child(even) {
+  background: #f9f9f9;
+}
+
+.tabla tbody tr:hover {
+  background: #eef3ff;
+}
+
+/* LOGOS */
+.tabla img {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+  vertical-align: middle;
+  margin-right: 6px;
+  border-radius: 4px;
+}
+
+/* INPUTS DE SETS */
+.tabla input {
+  width: 42px;
+  padding: 4px;
+  text-align: center;
+  border-radius: 4px;
+  border: 1px solid #bbb;
+}
+
+.tabla input:focus {
+  outline: none;
+  border-color: #1f3c88;
+}
+
+/* TABLA DE POSICIONES */
+.tabla.posiciones td:last-child {
+  font-weight: bold;
+  color: #1f3c88;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  h2 {
+    font-size: 18px;
+  }
+
+  .tabla {
+    font-size: 12px;
+  }
+}
