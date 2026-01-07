@@ -80,7 +80,13 @@ function pintarTabla(partidos) {
   partidos.forEach(p => {
     const tr = document.createElement("tr");
     tr.innerHTML = `
-      <td>${new Date(p.fecha_partido).toLocaleString()}</td>
+      <td>
+  <input type="datetime-local"
+         id="fecha-${p.id}"
+         value="${p.fecha_partido ? new Date(p.fecha_partido).toISOString().slice(0,16) : ""}">
+  <br>
+  <button onclick="guardarFechaHora(${p.id})">🕒</button>
+</td>
 
       <td>
         <div style="display:flex;align-items:center;gap:6px;">
@@ -174,6 +180,34 @@ function getVal(id) {
 }
 
 window.guardarResultado = guardarResultado;
+
+/* =========================
+   GUARDAR FECHA Y HORA
+   ========================= */
+async function guardarFechaHora(id) {
+  const input = document.getElementById(`fecha-${id}`);
+  if (!input || !input.value) {
+    alert("Seleccione una fecha y hora");
+    return;
+  }
+
+  const fechaISO = new Date(input.value).toISOString();
+
+  const { error } = await supabase
+    .from("olimpiadas_resultados_ecuavoley")
+    .update({ fecha_partido: fechaISO })
+    .eq("id", id);
+
+  if (error) {
+    console.error(error);
+    alert("❌ Error al guardar fecha");
+  } else {
+    alert("✅ Fecha y hora actualizadas");
+  }
+}
+
+window.guardarFechaHora = guardarFechaHora;
+
 
 /* =========================
    FILTRO POR CATEGORÍA
