@@ -2256,3 +2256,30 @@ select {
     font-size: 12px;
   }
 }
+
+/* 🏐 ECUAVOLEY – AISLAMIENTO TOTAL */
+#ecuavoley-posiciones table {
+  display: table;
+  width: 100%;
+  border-collapse: collapse;
+}
+
+#ecuavoley-posiciones thead {
+  display: table-header-group;
+}
+
+#ecuavoley-posiciones tbody {
+  display: table-row-group;
+}
+
+#ecuavoley-posiciones tr {
+  display: table-row;
+}
+
+#ecuavoley-posiciones th,
+#ecuavoley-posiciones td {
+  display: table-cell;
+  vertical-align: middle;
+  text-align: center;
+  white-space: nowrap;
+}

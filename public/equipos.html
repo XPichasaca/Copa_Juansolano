@@ -1,47 +1,11 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Equipos - Olimpiadas Juan Solano</title>
-  <link rel="stylesheet" href="style.css" />
+<meta charset="UTF-8">
 </head>
-<body class="fondo-gradiente">
-  <!-- HEADER -->
-  <header>
-    <img
-      src="img/logss.png"
-      alt="Logo"
-      class="logo-header"
-      onclick="location.href='index.html'"
-    />
-    <!-- 🔹 Botón hamburguesa -->
-  <div class="menu-toggle">
-    <span></span>
-    <span></span>
-    <span></span>
-  </div>
-    <h1 onclick="location.href='index.html'" style="cursor:pointer;">Olimpiadas Juan Solano</h1>
-    <nav>
-      <a href="index.html" class="activo">Inicio</a>
-      <a href="equipos.html">Equipos</a>
-      <a href="partidos.html">Partidos</a>
-      <a href="tabla.html">Tabla</a>
-      <a href="jugadores.html">Jugadores</a>
-      <a href="noticias.html">Noticias</a>
-      <a href="login.html" class="btn-login">Login</a>
-    </nav>
-    <img src="img/Quilloac.jpg" alt="Escudo" class="logo-header" />
-  </header>
-
-  <main class="contenedor">
-    <div id="listaEquipos" class="grid-equipos"></div>
-  </main>
-
-  <footer>
-    <p>Comuna Quilloac | Desarrollado por <strong>Xavier Pichasaca</strong> © 2025</p>
-  </footer>
-
-  <script type="module" src="js/equipos.js"></script>
+<body>
+<h2>📊 Tablas de posiciones – Ecuavóley</h2>
+<div id="contenedorTablas"></div>
+<script type="module" src="posicionesEcuavoley.js"></script>
 </body>
 </html>

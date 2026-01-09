@@ -136,6 +136,12 @@
   border-collapse: collapse;
 }
 
+td:last-child,
+th:last-child {
+  display: table-cell !important;
+}
+
+
   </style>
   <script>
 document.addEventListener("DOMContentLoaded", () => {
@@ -250,6 +256,7 @@ document.addEventListener("DOMContentLoaded", () => {
     <section class="menu-dashboard">
       <button class="btn-dash activo" data-seccion="noticias-seccion">📰 Noticias</button>
       <button class="btn-dash" data-seccion="posiciones-seccion">🏆 Posiciones</button>
+       <button class="btn-dash" data-seccion="ecuavoley-posiciones">🏆 Posiciones Ecuaboley</button>
       <button class="btn-dash" data-seccion="goleadores-seccion">⚽ Goleadores</button>
       <button class="btn-dash" data-seccion="tarjetas-seccion">🟨 Tarjetas</button>
       <button class="btn-dash" data-seccion="partidos">📅 Partidos de la Jornada</button>
@@ -324,6 +331,15 @@ document.addEventListener("DOMContentLoaded", () => {
 </section>
 
 
+<section id="ecuavoley-posiciones" class="seccion">
+  <div class="card">  
+    <h2>📊 Tablas de posiciones – Ecuavóley</h2>
+    <div id="contenedorTablas"></div>
+  </div>
+</section>
+
+
+
 <!-- GOLEADORES --> <section id="goleadores-seccion" class="seccion"> <div class="card"> <h2>⚽ Tabla de Goleadores</h2> <div id="contenedorGoleadores" class="contenedor-dos-columnas"> <!-- Se cargan automáticamente desde GoleadorTarjeta.js --> </div> </div> </section> <!-- TARJETAS --> <section id="tarjetas-seccion" class="seccion"> <div class="card"> <h2>🟨 Tabla de Amonestados</h2> <div id="contenedorTarjetas" class="contenedor-dos-columnas"> <!-- Se cargan automáticamente desde GoleadorTarjeta.js --> </div> </div> </section>
 
 
@@ -373,6 +389,8 @@ document.addEventListener("DOMContentLoaded", () => {
  <script type="module" src="partidosEcuavoleyPublico.js"></script>
   <script type="module" src="listaJordanaEcuabolyec.js"></script>
    <script type="module" src="PartidosEnVivo.js"></script>
+   <script type="module" src="posicionesEcuavoley.js"></script>   
+    
 
   <!-- ========================= -->
   <!-- ⚙️ Script de Dashboard y Compartir -->
